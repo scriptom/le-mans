@@ -1,0 +1,108 @@
+body{
+	background-color: #f2f2f2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0px;
+}
+
+.contenido{
+	width: 95%;
+	max-width: 1500px; 
+	/*margin: auto;*/
+	/*margin-top: 30px;*/
+	border-radius: 30px;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.contenido-izquierdo{
+	width: 50%;
+	background-color: #FFFFFF;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	/*height: 600px;*/
+	height: 88vh;
+}
+
+.contenido-izquierdo h1{
+	width: 100%;
+	text-align: center;
+}
+
+.contenedor-year{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.contenedor-year p{
+	display: span;
+	text-align: right;
+	margin-right: 15px;
+}
+
+.contenedor-imagen{
+	border: 2px solid blue;
+	margin: 40px 0 30px 0;
+	width: 80%;
+	height: 300px;
+}
+
+
+
+.contenido-derecho{
+	width: 50%;
+	background-color: black;
+	/*height: 600px;*/
+	height: 88vh;
+	display: flex;
+	justify-content: center;
+}
+
+.contenedor-grupo{
+	width: 80%;
+	margin-top: 20px;
+}
+
+.contenedor-grupo h3{
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 25px;
+}
+
+.contenedor-grupo-contenido{
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.item{
+	margin-top: 20px;
+	color: #FFFFFF;
+	width: 50%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.item-foto{
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 20px;
+}
+
+
+.item img{
+	width: 150%;
+	height: auto;
+}
