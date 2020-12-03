@@ -123,48 +123,21 @@ create or replace table participacion (
 ----------------------------------
 -- Definición de FKs             -
 ----------------------------------
-alter table equipo add foreign key (pais_id) references pais(id);
+alter table equipo add foreign key (pais_id) references pais(id) on delete restrict;
 
-alter table fabricante add foreign key (pais_id) references pais(id);
+alter table fabricante add foreign key (pais_id) references pais(id) on delete restrict;
 
-alter table piloto add foreign key (pais_id) references pais(id);
+alter table piloto add foreign key (pais_id) references pais(id) on delete restrict;
 
-alter table vehiculo add foreign key (chasis_fabricante_id) references fabricante(id);
+alter table vehiculo add foreign key (chasis_fabricante_id) references fabricante(id) ;
 alter table vehiculo add foreign key (neumaticos_fabricante_id) references fabricante(id);
-alter table vehiculo add foreign key (motor_id) references motor(id);
+alter table vehiculo add foreign key (motor_id) references motor(id) on delete restrict;
 
-alter table motor add foreign key (fabricante_id) references fabricante(id);
+alter table motor add foreign key (fabricante_id) references fabricante(id) on delete restrict;
 
-alter table piloto_participacion add foreign key (piloto_id) references piloto(id);
-alter table piloto_participacion add foreign key (participacion_id) references participacion(id);
+alter table piloto_participacion add foreign key (piloto_id) references piloto(id) on delete cascade;
+alter table piloto_participacion add foreign key (participacion_id) references participacion(id) on delete cascade;
 
-alter table participacion add foreign key (vehiculo_id) references vehiculo(id);
-alter table participacion add foreign key (equipo_id) references equipo(id);
-alter table participacion add foreign key (evento_id) references evento(id);
-----------------------------------
--- Definición de Funciones       -
-----------------------------------
-
-create or replace function obtener_edad(persona datos_personales) returns smallint as $$
-declare
-    intervalo_fechas interval,
-    fecha_fin timestamp
-begin
-    if persona.fecha_fallecimiento is not null then 
-        fecha_fin := persona.fecha_fallecimiento::timestamp;
-    else 
-        fecha_fin := now();
-    end if;
-    intervalo_fechas = age(fecha_fin, timestamp persona.fecha_nacimiento);
-    return ceil(date_part('year', intervalo_fechas))::integer;
-end; $$ language plpgsql;
-
-create or replace function obtener_identificacion(persona datos_personales) returns text as $$
-begin
-    return persona.nombre || ' ' || persona.apellido;
-end; $$ language plpgsql;
-
-
--- TODO: Agregar métodos diferencia y sumar (Cronometro)
--- TODO: Agregar métodos VelocidadMaxim, VelocidadMinima, DistanciaRecorrida, CantidadVueltas, MejorTiempo, PeorTiempo (Estadistica)
--- TODO: Agregar método AplicarPenalización (falla_tecnica)
+alter table participacion add foreign key (vehiculo_id) references vehiculo(id) on delete restrict;
+alter table participacion add foreign key (equipo_id) references equipo(id) on delete cascade;
+alter table participacion add foreign key (evento_id) references evento(id) on delete restrict;
