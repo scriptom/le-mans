@@ -7,13 +7,13 @@ create type incompleto as (
     vuelta smallint
 );
 
-create domain sexo as char(1) check (value = 'F' or value = 'M');
+create domain sexo as char(1) not null check (value = 'F' or value = 'M');
 
 create type datos_personales as (
     nombre varchar(20),
     apellido varchar(20),
     fecha_nacimiento date,
-    genero sexo not null,
+    genero sexo, -- Por el domain, ya el sexo es not null
     fecha_fallecimiento date
 );
 
@@ -22,7 +22,7 @@ create type cronometro as (
     minutos smallint,
     segundos smallint,
     milisegundos smallint
-)
+);
 
 create type estadistica as (
     vel_maxima real,
@@ -45,40 +45,40 @@ create type falla_tecnica as (
 -- Definición de tablas          -
 ----------------------------------
 
-create or replace table evento (
+create table evento (
     id serial primary key,
     tipo varchar(15) not null,
     ano smallint not null,
     longitud real not null
 );
 
-create or replace table equipo (
+create table equipo (
     id serial primary key,
     nombre varchar(20) not null,
     pais_id smallint not null
 );
 
-create or replace table fabricante (
+create table fabricante (
     id serial primary key,
     nombre varchar(20) not null,
     pais_id smallint not null
 );
 
-create or replace table pais (
+create table pais (
     id smallserial primary key,
     nombre varchar(20) not null,
     nacionalidad varchar(20) not null,
     foto bytea not null
 );
 
-create or replace table piloto (
+create table piloto (
     id serial primary key,
     datos datos_personales not null,
     foto bytea[5],
     pais_id smallint not null
 );
 
-create or replace table vehiculo (
+create table vehiculo (
     id smallserial primary key, 
     velocidad real not null,
     peso smallint not null,
@@ -89,7 +89,7 @@ create or replace table vehiculo (
     motor_id integer not null
 );
 
-create or replace table motor (
+create table motor (
     id smallserial primary key,
     caballos_fuerza smallint not null,
     modelo varchar(40) not null,
@@ -97,13 +97,15 @@ create or replace table motor (
     fabricante_id integer not null
 );
 
-create or replace table piloto_participacion (
+create table piloto_participacion (
     piloto_id integer not null,
     participacion_id integer,
-    primary key(piloto_id, participacion_id)
+    equipo_id integer,
+    unique (participacion_id, equipo_id),
+    primary key (piloto_id, participacion_id, equipo_id)
 );
 
-create or replace table participacion (
+create table participacion (
     id serial,
     finalizo boolean not null,
     numero_vueltas smallint not null,
@@ -116,8 +118,8 @@ create or replace table participacion (
     puesto_inicio smallint not null,
     vehiculo_id smallint not null,
     equipo_id integer not null,
-    evento_id integer not null
-    primary key(id, equipo_id)
+    evento_id integer not null,
+    primary key (id, equipo_id)
 );
 
 ----------------------------------
@@ -136,7 +138,7 @@ alter table vehiculo add foreign key (motor_id) references motor(id) on delete r
 alter table motor add foreign key (fabricante_id) references fabricante(id) on delete restrict;
 
 alter table piloto_participacion add foreign key (piloto_id) references piloto(id) on delete cascade;
-alter table piloto_participacion add foreign key (participacion_id) references participacion(id) on delete cascade;
+alter table piloto_participacion add foreign key (participacion_id, equipo_id) references participacion(id, equipo_id) on delete cascade;
 
 alter table participacion add foreign key (vehiculo_id) references vehiculo(id) on delete restrict;
 alter table participacion add foreign key (equipo_id) references equipo(id) on delete cascade;

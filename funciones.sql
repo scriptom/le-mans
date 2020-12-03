@@ -3,15 +3,15 @@
 ----------------------------------  
 create or replace function obtener_edad(persona datos_personales) returns smallint as $$
 declare
-    intervalo_fechas interval,
-    fecha_fin timestamp
+    intervalo_fechas interval;
+    fecha_fin timestamp;
 begin
     if persona.fecha_fallecimiento is not null then 
         fecha_fin := persona.fecha_fallecimiento::timestamp;
     else 
         fecha_fin := now();
     end if;
-    intervalo_fechas = age(fecha_fin, timestamp persona.fecha_nacimiento);
+    intervalo_fechas = age(fecha_fin, persona.fecha_nacimiento::timestamp);
     return ceil(date_part('year', intervalo_fechas))::integer;
 end; $$ language plpgsql;
 
