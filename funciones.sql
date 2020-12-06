@@ -12,7 +12,7 @@ begin
         fecha_fin := now();
     end if;
     intervalo_fechas = age(fecha_fin, persona.fecha_nacimiento::timestamp);
-    return ceil(date_part('year', intervalo_fechas))::integer;
+    return ceil(date_part('year', intervalo_fechas))::smallint;
 end; $$ language plpgsql;
 
 create or replace function obtener_identificacion(persona datos_personales) returns text as $$

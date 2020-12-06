@@ -66,8 +66,8 @@ create table fabricante (
 
 create table pais (
     id smallserial primary key,
-    nombre varchar(20) not null,
-    nacionalidad varchar(20) not null,
+    nombre varchar(35) not null,
+    nacionalidad varchar(35) not null,
     foto bytea not null
 );
 
