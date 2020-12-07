@@ -54,13 +54,13 @@ create table evento (
 
 create table equipo (
     id serial primary key,
-    nombre varchar(20) not null,
+    nombre varchar(40) not null,
     pais_id smallint not null
 );
 
 create table fabricante (
     id serial primary key,
-    nombre varchar(20) not null,
+    nombre varchar(40) not null,
     pais_id smallint not null
 );
 
