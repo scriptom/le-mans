@@ -83,6 +83,7 @@ create table vehiculo (
     velocidad real not null,
     peso smallint not null,
     tipo varchar(40) not null,
+    foto bytea[][],
     nombre_chasis varchar(40) not null,
     chasis_fabricante_id integer not null,
     neumaticos_fabricante_id integer not null,
