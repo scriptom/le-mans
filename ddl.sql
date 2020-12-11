@@ -17,19 +17,12 @@ create type datos_personales as (
     fecha_fallecimiento date
 );
 
-create type cronometro as (
-    hora smallint,
-    minutos smallint,
-    segundos smallint,
-    milisegundos smallint
-);
-
 create type estadistica as (
     vel_maxima real,
     vel_minima real,
     vel_media real,
-    mejor_tiempo_vuelta cronometro,
-    peor_tiempo_vuelta cronometro,
+    mejor_tiempo_vuelta interval,
+    peor_tiempo_vuelta interval,
     posicion smallint,
     distancia_recorrida real
 );
@@ -38,7 +31,7 @@ create type estadistica as (
 create type falla_tecnica as (
     parte_afectada varchar(20),
     gravedad smallint,
-    promedio_tiempo cronometro
+    promedio_tiempo interval
 );
 
 ----------------------------------
@@ -111,7 +104,7 @@ create table participacion (
     finalizo boolean not null,
     numero_vueltas smallint not null,
     numero_participacion smallint not null,
-    tiempo_total cronometro not null,
+    tiempo_total interval not null,
     estadisticas_hora estadistica[25] not null,
     fallas falla_tecnica[40],
     abandono incompleto,
