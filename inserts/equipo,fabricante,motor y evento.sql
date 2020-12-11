@@ -75,3 +75,61 @@ INSERT INTO equipo VALUES (DEFAULT,'Rudolf Caracciola',3),(DEFAULT,'Bentley Moto
 (DEFAULT,'René Bonnet',64),(DEFAULT,'G.E. Phillips',138),(DEFAULT,'R.R.C. Walker Racing Team',138),(DEFAULT,'Etablissements Delettrez',64),(DEFAULT,'Écurie France',64),(DEFAULT,'Mme Vivianne Elder',64),
 (DEFAULT,'Robert Redge',64),(DEFAULT,'Ecurie Lapin Blanche',138),(DEFAULT,'Marc Versini',64),(DEFAULT,'J.A. Plisson',64),(DEFAULT,'Peter Monkhouse',138),(DEFAULT,'Robert Tocheport',64),
 (DEFAULT,'Dudley C. Folland',138),(DEFAULT,'Ecurie Rosier',64),(DEFAULT,'Camille Hardy',64),(DEFAULT,'Aston Martin Lagonda Ltd.',138),(DEFAULT,'Louis Eggen',18);
+
+
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
+
+INSERT INTO vehiculo VALUES (DEFAULT,,,'','',,,,array[
+array[decode('','hex'),
+decode('','hex')],
+array[decode('','hex'),
+null],
+array[decode('','hex'),
+null]]);
