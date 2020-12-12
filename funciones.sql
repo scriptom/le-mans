@@ -129,3 +129,156 @@ begin
     return intervalo + falla.promedio_tiempo;
 end;
 $$ language plpgsql;
+
+----------------------------------
+-- Funciones de Equipo Tecnico   -
+----------------------------------  
+
+CREATE OR REPLACE FUNCTION generador_equipo_tecnico() RETURNS DATOS_PERSONALES
+AS $$
+DECLARE
+    nombre varchar(20);
+    apellido varchar(20);
+    genero sexo := 'M';
+    fecha_nac DATE;
+    fecha_muerte DATE;
+    random smallint;
+    random_dia int;
+    random_mes int;
+    random_ano int;
+BEGIN
+    SELECT INTO random floor(random()*(11)); --Se crearan 10 nombres y apellidos, por lo cual el random tiene que estar entre 0 y 10
+    SELECT INTO random_dia floor(random()*(28)+1); -- Se crea un dia de 0 a 30 para las fechas
+    SELECT INTO random_mes  floor(random()*(12)+1); -- Se genera un numero de 1 a 12 para los meses
+    SELECT INTO random_ano floor(random()*(20-10)+10); -- Para la generacion del año, tiene que tener al menos + de 20 años, por lo cualgeneramos un numero random y le sumamo 1890, para crear el año
+    if (random < 6) then
+        nombre := nombre_hombre(random);
+        genero := 'M';
+    else
+        nombre := nombre_mujer(random);
+        genero := 'F';
+    end if;
+    apellido := generar_apellido(random);
+    fecha_nac := fecha_nacimiento(random_dia,random_mes,random_ano);
+    fecha_muerte := fecha_muerte(random_dia,random_mes,random_ano);
+    RETURN row(nombre,apellido,fecha_nac,genero,fecha_muerte);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION nombre_hombre(random smallint) RETURNS varchar(20)
+AS $$
+DECLARE
+    nombre varchar(20);
+BEGIN
+    -- 5 nombres aleatorios de hombre, dependiendo del numero random que salga se asignara uno
+    if random = 1 then
+        nombre := 'John';
+    elsif random = 2 then
+        nombre := 'Frank';
+    elsif random = 3 then
+        nombre := 'Luis';
+    elsif random = 4 then
+        nombre := 'Marcos';
+    else 
+        nombre := 'Alejandro';
+    end if;
+    RETURN nombre;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION nombre_mujer(random smallint) RETURNS varchar(20)
+AS $$
+DECLARE
+    nombre varchar(20);
+BEGIN
+    -- 5 nombres aleatorios de mujer, dependiendo del numero random que salga se asignara uno
+    -- Como los numeros randon que entren aqui seran mayores a 5, se les resta 5 para que cumplan las condiciones
+    random := random - 5;
+    if random = 1 then
+        nombre := 'Andrea';
+    elsif random = 2 then
+        nombre := 'Valentina';
+    elsif random = 3 then
+        nombre := 'Luisa';
+    elsif random = 4 then
+        nombre := 'Cindy';
+    else 
+        nombre := 'Antonieta';
+    end if;
+    RETURN nombre;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION generar_apellido(random smallint) RETURNS varchar(20)
+AS $$
+DECLARE
+    apellido varchar(20);
+BEGIN
+    -- Apellidos random
+    if random = 1 then
+        apellido := 'Montilla';
+    elsif random = 2 then
+        apellido := 'Chineti';
+    elsif random = 3 then
+        apellido := 'Grande';
+    elsif random = 4 then
+        apellido := 'Canovas';
+    elsif random = 5 then
+        apellido := 'Quintero';
+    elsif random = 6 then
+        apellido := 'Valencia';
+    elsif random = 7 then
+        apellido := 'Serra';
+    elsif random = 8 then
+        apellido := 'Salas';
+    elsif random = 9 then
+        apellido := 'Mendez';
+    else 
+        apellido := 'Marin';
+    end if;
+    RETURN apellido;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fecha_nacimiento(dia int, mes int , ano int) RETURNS DATE
+AS $$
+DECLARE
+    fecha DATE;
+BEGIN
+    -- Generacion de la fecha de nacimiento, se pasan los randoms como ints y se usa la funcion make_date para crear un tipo date
+    fecha := make_date(ano + 1890, mes , dia);
+   RETURN fecha;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fecha_muerte(dia int, mes int , ano int) RETURNS DATE
+AS $$
+DECLARE
+    fecha DATE;
+BEGIN
+-- Generacion de la fecha de muerte, se pasan los randoms como ints y se usa la funcion make_date para crear un tipo date
+    fecha := make_date(ano + 1940, mes , dia);
+   RETURN fecha;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION equipo_tecnico_completo() RETURNS DATOS_PERSONALES[][]
+AS $$
+DECLARE
+    equipo_tecnico DATOS_PERSONALES[][] := '{{NULL,NULL,NULL,NULL},{NULL,NULL,NULL,NULL}}' ;
+    i smallint;
+BEGIN
+    -- Procedimiento usado para crear la matriz de Equipo tecnico, donde la primera fila corresponde a los mecanicos y la segunda al director de los pits.
+    FOR i IN 1..4 LOOP
+        equipo_tecnico[1][i] := generador_equipo_tecnico();
+    END LOOP;
+    equipo_tecnico[2][1] := generador_equipo_tecnico();
+    RETURN equipo_tecnico;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-----------------------------------------
+-- Fin de Funciones de Equipo Tecnico   -
+-----------------------------------------
