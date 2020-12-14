@@ -296,3 +296,93 @@ $$ LANGUAGE plpgsql;
 -----------------------------------------
 -- Fin de Funciones de Equipo Tecnico   -
 -----------------------------------------
+
+--Funcion utilizada para devolver la velocidad media en funcion a la cantidad de vueltas
+CREATE OR REPLACE FUNCTION consulta_velocidad_media(cantidad_vueltas smallint, longitud_cir real) RETURNS REAL
+AS $$
+BEGIN
+--Para los reportes se buscara la velocidad media en la carrera, par esto se necesita la cantidad de vueltas
+--finales que se registraron y se dividira entre 24, se multiplicara por la distancia del circuito para
+--tener una velocidad media aproximada, ya que eso dira cuanto recorrio aproximadamente cada hora
+RETURN (cantidad_vueltas * longitud_cir)/ 24;
+END;
+$$ LANGUAGE plpgsql;
+
+--Funcion utilizada para buscar el mejor tiempo de vuelta
+CREATE OR REPLACE FUNCTION consulta_mejor_tiempo(estadisticas estadistica[]) RETURNS interval
+AS $$
+DECLARE
+    cont int = array_length(estadisticas,1);
+    mejor interval = '24:00:00';
+BEGIN
+    -- Para buscar el mejor timpo, es necesario iterar en todo el array de estadisticas
+    FOR i IN 1..24 LOOP
+        if (i > array_length(estadisticas,1)) then
+            -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
+            EXIT;
+        end if;
+        if (mejor > estadisticas[i].mejor_tiempo_vuelta) then
+            -- Para saber si se tiene el tiempo mas bajo, se comprar con el mejor tiempo guardado a ver si este es menor al que se tiene guardado
+            -- si es asi, se asigna a mejor y se sigue iterando hasta llegar a los 24
+            mejor = estadisticas[i].mejor_tiempo_vuelta;
+        end if;
+    END LOOP;
+RETURN mejor;
+END;
+$$ LANGUAGE plpgsql;
+
+--Funcion usada para calcular la distancia en vueltas con el puesto anterior
+--Los parametros serian: la distancia recorrida hasta la hora del participante anterior, la distancia recorrida del corredor y la longitud del circuito
+CREATE OR REPLACE FUNCTION consultar_vueltas_anterior(distancia_anterior real,distancia real,longitud real) RETURNS smallint
+AS $$
+DECLARE
+BEGIN
+    --Para saber la distancia en vueltas se va a restar las distancias recorridas en la hora
+    --y se dividiran entre la longitud del circuito par sacar la cantidad de vueltas
+    --luego se les hara floor para devolver una cantidad entera
+    RETURN FLOOR(cantidad_vueltas(distancia - distancia_anterior,longitud));
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION calcular_distancia_recorrdia(estadisticas estadistica[]) RETURNS real
+AS $$
+DECLARE
+    cont int = array_length(estadisticas,1);
+    total real = 0;
+BEGIN
+     FOR i IN 1..24 LOOP
+        if (i > array_length(estadisticas,1)) then
+            -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
+            EXIT;
+        end if;
+        total = total + estadisticas[i].distancia_recorrida;
+    END LOOP;
+    RETURN total;
+END;
+$$ LANGUAGE plpgsql;
+
+-- funcion creada para calcualr el tiempo con respecto al piloto anterior
+--los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto 
+CREATE OR REPLACE FUNCTION calcular_tiempo_anterior(distancia_recorrida_anterior real, velocidad_anterior real , distancia real) RETURNS time
+AS $$
+DECLARE
+   tiempo interval = '00:00:00';
+   distancia_faltante real = 0;
+   tiempo_faltante real;
+   minutos int;
+BEGIN
+    --Para calcular el tiempo se usara una regla de 3, primero se calculara la distancia que debe recorrer
+    -- para alcanzar al piloto, siendo una resta de distancias
+    distancia_faltante = distancia - distancia_recorrida_anterior;
+    --Luego se multiplicara por 60 y se dividira entra la velocidad a la que iba el piloto para saber en cuanto
+    --tiempo lo alcanzara usando la velocidad media como referencia
+    tiempo_faltante = ((distancia_faltante * 60) / velocidad_anterior);
+    if (tiempo_faltante - FLOOR(tiempo_faltante) > 0.60) then 
+        tiempo_faltante = tiempo_faltante +  1 - 0.60;
+    end if;
+    --Luego se creara un tipo date armado con el tiempo
+    minutos = FLOOR(tiempo_faltante::int);
+    RETURN make_time(0,minutos,(tiempo_faltante - FLOOR(tiempo_faltante))*100);
+END;
+$$ LANGUAGE plpgsql;
