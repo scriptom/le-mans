@@ -95,7 +95,6 @@ create table piloto_participacion (
     piloto_id integer not null,
     participacion_id integer,
     equipo_id integer,
-    unique (participacion_id, equipo_id),
     primary key (piloto_id, participacion_id, equipo_id)
 );
 

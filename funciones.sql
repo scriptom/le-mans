@@ -84,20 +84,34 @@ create or replace function generar_estadistica(longitud_circuito real, velocidad
 $$
 declare
     velocidad_maxima real;
+    velocidad_minima real;
+    velocidad_media real;
+    cantidad_vueltas real;
+    distancia_recorrida real;
 begin
     velocidad_maxima := velocidad_maxima(velocidad_maxima_vehiculo);
-    return row (velocidad_maxima, velocidad_minima(velocidad_maxima), velocidad_media(velocidad_maxima), mejor_tiempo_vuelta, peor_tiempo_vuelta);
+    velocidad_minima := velocidad_minima(velocidad_maxima_vehiculo);
+    velocidad_media := velocidad_media(velocidad_maxima_vehiculo);
+    distancia_recorrida := distancia_recorrida(velocidad_media);
+    cantidad_vueltas := cantidad_vueltas(distancia_recorrida, longitud_circuito);
+    return row (velocidad_maxima,
+        velocidad_minima,
+        velocidad_media,
+        mejor_tiempo_vuelta(cantidad_vueltas),
+        peor_tiempo_vuelta(cantidad_vueltas),
+        -1::smallint, -- Usamos un numero negativo para saber que tenemos que recalcular la posicion una vez hayamos generado todas las estadisticas de lahora
+        distancia_recorrida);
 end;
 $$ language plpgsql;
 
 create or replace function mejor_tiempo_vuelta(cantidad_vueltas real) returns interval as
 $$
 declare
-    tiempo_mejor real;
-    suma         real;
+    tiempo_mejor interval; -- tiempo medio (minutos)
+    suma         interval; -- suma de tiempos parciales para promediar
 begin
-    tiempo_mejor := 60 / cantidad_vueltas;
-    suma := 0;
+    tiempo_mejor := interval '60 minutes' / cantidad_vueltas;
+    suma := interval '0 minutes';
     for _ in 1..5
         loop
             suma := suma + tiempo_mejor * porcentaje_aleatorio_entre(90, 99);
@@ -109,11 +123,11 @@ $$ language plpgsql;
 create or replace function peor_tiempo_vuelta(cantidad_vueltas real) returns interval as
 $$
 declare
-    tiempo_peor real;
-    suma        real;
+    tiempo_peor interval; -- tiempo medio (en minutos)
+    suma        interval; -- suma de tiempos parciales para promediar
 begin
-    tiempo_peor := 60 / cantidad_vueltas;
-    suma := 0;
+    tiempo_peor := interval '60 minutes' / cantidad_vueltas;
+    suma := interval '0 minutes';
     for _ in 1..5
         loop
             suma := suma + tiempo_peor * porcentaje_aleatorio_entre(101, 110);
