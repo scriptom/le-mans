@@ -344,8 +344,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION calcular_distancia_recorrdia(estadisticas estadistica[]) RETURNS real
+--Funcion utilizada para calcular la distancia que ha recorrido un participante en total
+CREATE OR REPLACE FUNCTION calcular_distancia_recorrida(estadisticas estadistica[]) RETURNS real
 AS $$
 DECLARE
     cont int = array_length(estadisticas,1);
@@ -356,6 +356,7 @@ BEGIN
             -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
             EXIT;
         end if;
+        --Se suma la distancia recorrida en cada iteracion del ciclo
         total = total + estadisticas[i].distancia_recorrida;
     END LOOP;
     RETURN total;
