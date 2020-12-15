@@ -298,25 +298,25 @@ $$ LANGUAGE plpgsql;
 -----------------------------------------
 
 --Funcion utilizada para devolver la velocidad media en funcion a la cantidad de vueltas
-CREATE OR REPLACE FUNCTION consulta_velocidad_media(cantidad_vueltas smallint, longitud_cir real) RETURNS REAL
+CREATE OR REPLACE FUNCTION consulta_velocidad_media(cantidad_vueltas smallint, longitud_cir real,hora int) RETURNS REAL
 AS $$
 BEGIN
 --Para los reportes se buscara la velocidad media en la carrera, par esto se necesita la cantidad de vueltas
 --finales que se registraron y se dividira entre 24, se multiplicara por la distancia del circuito para
 --tener una velocidad media aproximada, ya que eso dira cuanto recorrio aproximadamente cada hora
-RETURN (cantidad_vueltas * longitud_cir)/ 24;
+RETURN (cantidad_vueltas * longitud_cir)/ hora;
 END;
 $$ LANGUAGE plpgsql;
 
 --Funcion utilizada para buscar el mejor tiempo de vuelta
-CREATE OR REPLACE FUNCTION consulta_mejor_tiempo(estadisticas estadistica[]) RETURNS interval
+CREATE OR REPLACE FUNCTION consulta_mejor_tiempo(estadisticas estadistica[], hora int) RETURNS interval
 AS $$
 DECLARE
     cont int = array_length(estadisticas,1);
     mejor interval = '24:00:00';
 BEGIN
-    -- Para buscar el mejor timpo, es necesario iterar en todo el array de estadisticas
-    FOR i IN 1..24 LOOP
+    -- Para buscar el mejor timpo, iteramos en el array de estadisticas hasta la hora seleccionada
+    FOR i IN 1..hora LOOP
         if (i > array_length(estadisticas,1)) then
             -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
             EXIT;
@@ -345,13 +345,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 --Funcion utilizada para calcular la distancia que ha recorrido un participante en total
-CREATE OR REPLACE FUNCTION calcular_distancia_recorrida(estadisticas estadistica[]) RETURNS real
+CREATE OR REPLACE FUNCTION calcular_distancia_recorrida(estadisticas estadistica[], hora int) RETURNS real
 AS $$
 DECLARE
     cont int = array_length(estadisticas,1);
     total real = 0;
 BEGIN
-     FOR i IN 1..24 LOOP
+    --Para calcular la distancia recorrdia, recorremos el array hasta la hora especificada
+     FOR i IN 1..hora LOOP
         if (i > array_length(estadisticas,1)) then
             -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
             EXIT;
@@ -387,3 +388,19 @@ BEGIN
     RETURN make_time(0,minutos,(tiempo_faltante - FLOOR(tiempo_faltante))*100);
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- funcion creada para calcualr el tiempo con respecto al piloto anterior
+--los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto 
+CREATE OR REPLACE FUNCTION calcular_vueltas_hora(estadisticas estadistica[], hora int, longitud real) RETURNS real
+AS $$
+DECLARE
+   distancia_recorrida real;
+BEGIN
+    distancia_recorrida = calcular_distancia_recorrida(estadisticas,hora);
+    RETURN FLOOR(cantidad_vueltas(distancia_recorrida,longitud));
+END;
+$$ LANGUAGE plpgsql;
+
+
+(select estadisticas_hora from participacion where id = 103)
