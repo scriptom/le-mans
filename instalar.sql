@@ -4,3 +4,5 @@
 
 -- Inserts
 \i 'inserts/paises.sql';
+\i 'inserts/equipo,fabricante,motor y evento.sql';
+\i 'inserts/pilotos.sql';
