@@ -402,5 +402,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-(select estadisticas_hora from participacion where id = 103)
+--funcion usada para convertir reals en tiempo
+CREATE OR REPLACE FUNCTION convertir_tiempo(tiempo real) RETURNS interval
+AS $$
+DECLARE
+    minutos int;
+    segundos real;
+BEGIN
+    minutos = FLOOR(tiempo)::int;
+    segundos = (tiempo - FLOOR(tiempo)) * 100;
+ RETURN make_interval(mins => minutos,secs => segundos);
+END;
+$$ LANGUAGE plpgsql;
