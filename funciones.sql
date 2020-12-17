@@ -404,3 +404,27 @@ $$ LANGUAGE plpgsql;
 
 
 (select estadisticas_hora from participacion where id = 103)
+
+
+
+
+
+
+
+
+
+
+-- DANIEL
+
+-- funcion que devuelve la cantidad de horas que un participante estuvo en participacion
+CREATE OR REPLACE FUNCTION consulta_horas_en_carrera(estadisticas estadistica[]) RETURNS integer
+AS $$
+DECLARE
+    horas int = array_length(estadisticas,1);
+BEGIN
+RETURN horas;
+END;
+$$ LANGUAGE plpgsql;
+
+
+

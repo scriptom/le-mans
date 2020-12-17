@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maestro" pageWidth="1800" pageHeight="842" columnWidth="1760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d7a11275-b4e4-4fe3-870a-f7d5687df7fa">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LeMans"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="ano" class="java.lang.Integer"/>
+	<parameter name="categoria" class="java.lang.String"/>
+	<parameter name="hora" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[select nombre from pais
+limit 1]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pais"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="292" splitType="Stretch">
+			<subreport>
+				<reportElement x="80" y="60" width="200" height="200" uuid="22b957de-cecf-4f8d-9e6d-48d2bfe94566"/>
+				<subreportParameter name="ano_sub">
+					<subreportParameterExpression><![CDATA[$P{ano}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="categoria_sub">
+					<subreportParameterExpression><![CDATA[$P{categoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="hora_sub">
+					<subreportParameterExpression><![CDATA[$P{hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["subreporte_carreras.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="80" y="20" width="100" height="30" uuid="b002340d-cc12-4b3c-8455-194a0279c1dc"/>
+				<text><![CDATA[CARRERA]]></text>
+			</staticText>
+		</band>
+		<band height="282">
+			<subreport>
+				<reportElement x="80" y="60" width="200" height="200" uuid="a9dc0a3a-a31c-4763-b3ca-ee8a0dcee84a"/>
+				<subreportParameter name="ano_sub">
+					<subreportParameterExpression><![CDATA[$P{ano}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="categoria_sub">
+					<subreportParameterExpression><![CDATA[$P{categoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="hora_sub">
+					<subreportParameterExpression><![CDATA[$P{hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["subreporte_ensayo.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="80" y="18" width="100" height="30" uuid="07c20553-b94e-4b44-ab71-52af1db3ce4e"/>
+				<text><![CDATA[ENSAYO]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="60" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>

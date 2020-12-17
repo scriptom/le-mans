@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maestro" pageWidth="1700" pageHeight="842" columnWidth="1660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae92678d-a616-4962-8e12-6045f20f8e71">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LeMans"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ano" class="java.lang.Integer"/>
+	<parameter name="categoria" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from reporte_tres($P{ano}, $P{categoria})]]>
+	</queryString>
+	<field name="ano" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ano"/>
+		<property name="com.jaspersoft.studio.field.label" value="ano"/>
+	</field>
+	<field name="nombre_equipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_equipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_equipo"/>
+	</field>
+	<field name="numero_equipo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero_equipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_equipo"/>
+	</field>
+	<field name="nacionalidad_equipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nacionalidad_equipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="nacionalidad_equipo"/>
+	</field>
+	<field name="nombre_piloto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_piloto"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_piloto"/>
+	</field>
+	<field name="foto_piloto" class="java.sql.Array">
+		<property name="com.jaspersoft.studio.field.name" value="foto_piloto"/>
+		<property name="com.jaspersoft.studio.field.label" value="foto_piloto"/>
+	</field>
+	<field name="nacionalidad_piloto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nacionalidad_piloto"/>
+		<property name="com.jaspersoft.studio.field.label" value="nacionalidad_piloto"/>
+	</field>
+	<field name="nombre_vehiculo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_vehiculo"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_vehiculo"/>
+	</field>
+	<field name="tipo_vehiculo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo_vehiculo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo_vehiculo"/>
+	</field>
+	<field name="foto_vehiculo" class="java.sql.Array">
+		<property name="com.jaspersoft.studio.field.name" value="foto_vehiculo"/>
+		<property name="com.jaspersoft.studio.field.label" value="foto_vehiculo"/>
+	</field>
+	<field name="motor_vehiculo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="motor_vehiculo"/>
+		<property name="com.jaspersoft.studio.field.label" value="motor_vehiculo"/>
+	</field>
+	<field name="puesto_inicio" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="puesto_inicio"/>
+		<property name="com.jaspersoft.studio.field.label" value="puesto_inicio"/>
+	</field>
+	<field name="tiempo_total" class="org.postgresql.util.PGInterval">
+		<property name="com.jaspersoft.studio.field.name" value="tiempo_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="tiempo_total"/>
+	</field>
+	<field name="velocidad_media" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="velocidad_media"/>
+		<property name="com.jaspersoft.studio.field.label" value="velocidad_media"/>
+	</field>
+	<field name="numero_vueltas" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero_vueltas"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_vueltas"/>
+	</field>
+	<field name="finalizo" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="finalizo"/>
+		<property name="com.jaspersoft.studio.field.label" value="finalizo"/>
+	</field>
+	<field name="distancia_recorrida" class="java.lang.Float">
+		<property name="com.jaspersoft.studio.field.name" value="distancia_recorrida"/>
+		<property name="com.jaspersoft.studio.field.label" value="distancia_recorrida"/>
+	</field>
+	<field name="mejor_tiempo_vuelta" class="org.postgresql.util.PGInterval">
+		<property name="com.jaspersoft.studio.field.name" value="mejor_tiempo_vuelta"/>
+		<property name="com.jaspersoft.studio.field.label" value="mejor_tiempo_vuelta"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="108" height="30" uuid="01b11b6f-08da-4e15-8f6d-96a8234a6ffb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42b0f78b-2cee-40c3-8472-b6a29f0a7896"/>
+				</reportElement>
+				<text><![CDATA[ano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="0" width="97" height="30" uuid="50035d1b-8afe-462a-b7bf-77de98128bef">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bfad7b45-1bc1-4ebe-b304-d50cb27469c1"/>
+				</reportElement>
+				<text><![CDATA[nombre_equipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="0" width="97" height="30" uuid="d338c243-c136-45b6-8ec8-7c509c48711d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0caf0b0e-28b2-471c-834e-310874864dc6"/>
+				</reportElement>
+				<text><![CDATA[numero_equipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="302" y="0" width="97" height="30" uuid="45cbae6d-77a4-4f1e-9ffc-6a6bbc80a660">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1a90054-d740-473e-8833-06d3c0933658"/>
+				</reportElement>
+				<text><![CDATA[nacionalidad_equipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="0" width="97" height="30" uuid="158f14a9-8609-4cc3-83c3-9d433306fe49">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f81009b3-1213-4ff6-bae4-8462364ac1c6"/>
+				</reportElement>
+				<text><![CDATA[nombre_piloto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="496" y="0" width="97" height="30" uuid="5e0a0303-584a-446e-bca7-535097e0e411">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="79f223b3-0dec-4e79-92b3-7a92f4a16b44"/>
+				</reportElement>
+				<text><![CDATA[foto_piloto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="593" y="0" width="97" height="30" uuid="502c3af9-07e9-4f69-954c-ba88fec1ffa3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e37b763-5f8e-49d5-af2e-d60041769488"/>
+				</reportElement>
+				<text><![CDATA[nacionalidad_piloto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="0" width="97" height="30" uuid="ed8a0d25-9fdf-4fba-9a41-364e76e34f89">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="27c40226-afa2-4433-9dd6-26bca2f7e1b6"/>
+				</reportElement>
+				<text><![CDATA[nombre_vehiculo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="787" y="0" width="97" height="30" uuid="ae84ed5e-a8ba-42a9-86f4-776e10f08e35">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72b8a988-6d12-4de0-9df1-446d3af3ed76"/>
+				</reportElement>
+				<text><![CDATA[tipo_vehiculo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="884" y="0" width="97" height="30" uuid="2b3bb6cb-8476-4d4c-9bb8-4697498e9ea7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="609ab744-a0cb-48d6-b6cf-cd06431499ab"/>
+				</reportElement>
+				<text><![CDATA[foto_vehiculo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="981" y="0" width="97" height="30" uuid="17231e24-ffc2-40d3-b6ec-ae842d490384">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b01327bf-e445-47bd-a058-1656bb9df747"/>
+				</reportElement>
+				<text><![CDATA[motor_vehiculo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1078" y="0" width="97" height="30" uuid="4235000c-045c-4258-b6a0-6458c06026ee">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be601ffe-cc32-4ae1-a1c0-daedfb4be6e3"/>
+				</reportElement>
+				<text><![CDATA[puesto_inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1175" y="0" width="97" height="30" uuid="4b178ac7-83ae-41d8-b1e6-6dffe0f7cf34">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="19391649-b4c3-4375-adf3-06f2ff230798"/>
+				</reportElement>
+				<text><![CDATA[tiempo_total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1272" y="0" width="97" height="30" uuid="dc919d2a-db9d-4974-8073-16e0fd7043ac">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c5cdd3-dff4-4f1c-a2da-1959206ea877"/>
+				</reportElement>
+				<text><![CDATA[velocidad_media]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1369" y="0" width="97" height="30" uuid="11c93d57-f0d6-4963-b66c-4eeae87cea87">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e04d35bc-decc-49bf-a908-0d668e1b9027"/>
+				</reportElement>
+				<text><![CDATA[numero_vueltas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1466" y="0" width="97" height="30" uuid="ad75322e-3e04-4f0f-bb2b-5d874dd02e6c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7d66435-fdd0-494c-a223-09f502c6f527"/>
+				</reportElement>
+				<text><![CDATA[distancia_recorrida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1563" y="0" width="97" height="30" uuid="69a1ba90-bd12-4052-b46c-2b46549ddc51">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f8e8aa91-501b-4aab-88fc-8d99afce0b3f"/>
+				</reportElement>
+				<text><![CDATA[mejor_tiempo_vuelta]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="108" height="30" uuid="ff439214-d3eb-4bb1-a482-14d68dab1091">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42b0f78b-2cee-40c3-8472-b6a29f0a7896"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="108" y="0" width="97" height="30" uuid="da9df973-c1c7-41ee-a042-08b34717e33c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bfad7b45-1bc1-4ebe-b304-d50cb27469c1"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nombre_equipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="0" width="97" height="30" uuid="e96cbb30-a817-42af-8ce0-698c3af9f7f9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0caf0b0e-28b2-471c-834e-310874864dc6"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{numero_equipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="0" width="97" height="30" uuid="abaebf10-e2e8-4752-8077-4580d48807c3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1a90054-d740-473e-8833-06d3c0933658"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nacionalidad_equipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="399" y="0" width="97" height="30" uuid="bb1892d1-f4e6-4806-875e-97eccabcb63d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f81009b3-1213-4ff6-bae4-8462364ac1c6"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nombre_piloto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="593" y="0" width="97" height="30" uuid="26836698-a6e9-4257-ba6d-67d495be27a6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e37b763-5f8e-49d5-af2e-d60041769488"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nacionalidad_piloto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="690" y="0" width="97" height="30" uuid="d430fa4a-84f6-43d1-9497-eecd357dbeaf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="27c40226-afa2-4433-9dd6-26bca2f7e1b6"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nombre_vehiculo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="787" y="0" width="97" height="30" uuid="7ed08035-e73f-448f-aef3-48625b8b1e9d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72b8a988-6d12-4de0-9df1-446d3af3ed76"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{tipo_vehiculo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="981" y="0" width="97" height="30" uuid="f6831d7a-5b04-4c5e-9cf1-51f741b681d4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b01327bf-e445-47bd-a058-1656bb9df747"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{motor_vehiculo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1078" y="0" width="97" height="30" uuid="003b4357-ef7e-40c1-8c62-3f5db961ff7f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be601ffe-cc32-4ae1-a1c0-daedfb4be6e3"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{puesto_inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1175" y="0" width="97" height="30" uuid="8e14c3f1-a7df-4c11-842c-43764b0a6cc4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="19391649-b4c3-4375-adf3-06f2ff230798"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{tiempo_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1272" y="0" width="97" height="30" uuid="309796ab-a5ad-457d-bc2d-c42924910161">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c5cdd3-dff4-4f1c-a2da-1959206ea877"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{velocidad_media}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1369" y="0" width="97" height="30" uuid="824536c2-28eb-4f51-938e-749760eb62d0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e04d35bc-decc-49bf-a908-0d668e1b9027"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{numero_vueltas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1466" y="0" width="97" height="30" uuid="e43de986-56ee-4971-9de5-d4fbaa086771">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a7d66435-fdd0-494c-a223-09f502c6f527"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{distancia_recorrida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1563" y="0" width="97" height="30" uuid="709238f4-8fe4-4f18-87c2-d6502a1af592">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f8e8aa91-501b-4aab-88fc-8d99afce0b3f"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{mejor_tiempo_vuelta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>
