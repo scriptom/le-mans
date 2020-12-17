@@ -1,0 +1,10 @@
+INSERT INTO fabricante VALUES (1,'Mercedes-Benz',3),(2,'Bentley',138),(3,'Stutz Motor Company',58),(4,'Sunbeam-Talbot',138),
+(5,'Alfa Romeo',86),(6,'Lea-Francis',138),(7,'Meadows',138),(8,'Bugatti',64),(9,'Tracta',64),(10,'MG Cars',138),
+(11,'Chrysler',58),(12,'Lorraine-Dietrich',64),(13,'Arrol-Aster',138),(14,'Aston Martin',138),(15,'Bollack Netter and Co',64),(16,'Ruby',64),
+(17,'Automobiles Lombard',64),(18,'Amilcar',64),(19,'Salmson',64),(20,'Alta Car and Engineering Company',64),(21,'Automobiles Rally',64),(22,'Citroën',64),
+(23,'Duesenberg',58),(24,'S.A.R.A',64),(25,'Riley Motors',64),(26,'Austin Motor Company',138),(27,'Derby',64),
+(28,'Singer Motors',138),(29,'Lagonda',138),(30,'Delahaye',64),(31,'Frazer Nash',138),(32,'Fiat',64),(33,'Delage',64),
+(34,'Adler',3),(35,'Peugeot',64),(36,'HRG Engineering Company',138),(37,'Ford Motor Company',58),(38,'Chenard-Walcker',64),(39,'BMW',3),
+(40,'Morgan Motor Company',138),(41,'Atalanta Motors Ltd',138),(42,'Ferrari',86),(43,'Aero',55),(44,'Donald Healey Motor Company Limited',138),
+(45,'Renault',64),(46,'Alvis Car and Engineering Company',138),(47,'Deletrez Brothers',64),(48,'Dunlop',138),(49,'Englebert',138),(50,'Pirelli',86),
+(51,'Monopole',64);

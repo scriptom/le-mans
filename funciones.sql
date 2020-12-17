@@ -28,7 +28,7 @@ $$ language plpgsql;
 create or replace function porcentaje_aleatorio_entre(l_inf real, l_sup real) returns real as
 $$
 begin
-    return (random() * (l_sup - l_inf + 1) + l_inf) / 100;
+    return floor((random() * (l_sup - l_inf + 1) + l_inf)) / 100;
 end;
 $$ language plpgsql;
 
@@ -83,10 +83,10 @@ $$ language plpgsql;
 create or replace function generar_estadistica(longitud_circuito real, velocidad_maxima_vehiculo real) returns estadistica as
 $$
 declare
-    velocidad_maxima real;
-    velocidad_minima real;
-    velocidad_media real;
-    cantidad_vueltas real;
+    velocidad_maxima    real;
+    velocidad_minima    real;
+    velocidad_media     real;
+    cantidad_vueltas    real;
     distancia_recorrida real;
 begin
     velocidad_maxima := velocidad_maxima(velocidad_maxima_vehiculo);
@@ -139,7 +139,11 @@ $$ language plpgsql;
 create or replace function aplicar_penalizacion(falla falla_tecnica, intervalo interval) returns interval as
 $$
 begin
-    -- TODO: Levantar error cuando sea grave la falla
+    -- Si la falla es grave, entonces vamos a simplemente arrijar una excepción con un código personalizado
+    if falla.gravedad = 3::smallint then
+        raise exception using
+            errcode = 'GRAVE';
+    end if;
     return intervalo + falla.promedio_tiempo;
 end;
 $$ language plpgsql;
@@ -149,22 +153,23 @@ $$ language plpgsql;
 ----------------------------------  
 
 CREATE OR REPLACE FUNCTION generador_equipo_tecnico() RETURNS DATOS_PERSONALES
-AS $$
+AS
+$$
 DECLARE
-    nombre varchar(20);
-    apellido varchar(20);
-    genero sexo := 'M';
-    fecha_nac DATE;
+    nombre       varchar(20);
+    apellido     varchar(20);
+    genero       sexo := 'M';
+    fecha_nac    DATE;
     fecha_muerte DATE;
-    random smallint;
-    random_dia int;
-    random_mes int;
-    random_ano int;
+    random       smallint;
+    random_dia   int;
+    random_mes   int;
+    random_ano   int;
 BEGIN
-    SELECT INTO random floor(random()*(11)); --Se crearan 10 nombres y apellidos, por lo cual el random tiene que estar entre 0 y 10
-    SELECT INTO random_dia floor(random()*(28)+1); -- Se crea un dia de 0 a 30 para las fechas
-    SELECT INTO random_mes  floor(random()*(12)+1); -- Se genera un numero de 1 a 12 para los meses
-    SELECT INTO random_ano floor(random()*(20-10)+10); -- Para la generacion del año, tiene que tener al menos + de 20 años, por lo cualgeneramos un numero random y le sumamo 1890, para crear el año
+    SELECT INTO random floor(random() * (11)); --Se crearan 10 nombres y apellidos, por lo cual el random tiene que estar entre 0 y 10
+    SELECT INTO random_dia floor(random() * (28) + 1); -- Se crea un dia de 0 a 30 para las fechas
+    SELECT INTO random_mes floor(random() * (12) + 1); -- Se genera un numero de 1 a 12 para los meses
+    SELECT INTO random_ano floor(random() * (20 - 10) + 10); -- Para la generacion del año, tiene que tener al menos + de 20 años, por lo cualgeneramos un numero random y le sumamo 1890, para crear el año
     if (random < 6) then
         nombre := nombre_hombre(random);
         genero := 'M';
@@ -173,14 +178,15 @@ BEGIN
         genero := 'F';
     end if;
     apellido := generar_apellido(random);
-    fecha_nac := fecha_nacimiento(random_dia,random_mes,random_ano);
-    fecha_muerte := fecha_muerte(random_dia,random_mes,random_ano);
-    RETURN row(nombre,apellido,fecha_nac,genero,fecha_muerte);
+    fecha_nac := fecha_nacimiento(random_dia, random_mes, random_ano);
+    fecha_muerte := fecha_muerte(random_dia, random_mes, random_ano);
+    RETURN row (nombre,apellido,fecha_nac,genero,fecha_muerte);
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION nombre_hombre(random smallint) RETURNS varchar(20)
-AS $$
+AS
+$$
 DECLARE
     nombre varchar(20);
 BEGIN
@@ -193,7 +199,7 @@ BEGIN
         nombre := 'Luis';
     elsif random = 4 then
         nombre := 'Marcos';
-    else 
+    else
         nombre := 'Alejandro';
     end if;
     RETURN nombre;
@@ -201,7 +207,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION nombre_mujer(random smallint) RETURNS varchar(20)
-AS $$
+AS
+$$
 DECLARE
     nombre varchar(20);
 BEGIN
@@ -216,7 +223,7 @@ BEGIN
         nombre := 'Luisa';
     elsif random = 4 then
         nombre := 'Cindy';
-    else 
+    else
         nombre := 'Antonieta';
     end if;
     RETURN nombre;
@@ -224,7 +231,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION generar_apellido(random smallint) RETURNS varchar(20)
-AS $$
+AS
+$$
 DECLARE
     apellido varchar(20);
 BEGIN
@@ -247,51 +255,54 @@ BEGIN
         apellido := 'Salas';
     elsif random = 9 then
         apellido := 'Mendez';
-    else 
+    else
         apellido := 'Marin';
     end if;
     RETURN apellido;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fecha_nacimiento(dia int, mes int , ano int) RETURNS DATE
-AS $$
+CREATE OR REPLACE FUNCTION fecha_nacimiento(dia int, mes int, ano int) RETURNS DATE
+AS
+$$
 DECLARE
     fecha DATE;
 BEGIN
     -- Generacion de la fecha de nacimiento, se pasan los randoms como ints y se usa la funcion make_date para crear un tipo date
-    fecha := make_date(ano + 1890, mes , dia);
-   RETURN fecha;
+    fecha := make_date(ano + 1890, mes, dia);
+    RETURN fecha;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION fecha_muerte(dia int, mes int , ano int) RETURNS DATE
-AS $$
+CREATE OR REPLACE FUNCTION fecha_muerte(dia int, mes int, ano int) RETURNS DATE
+AS
+$$
 DECLARE
     fecha DATE;
 BEGIN
--- Generacion de la fecha de muerte, se pasan los randoms como ints y se usa la funcion make_date para crear un tipo date
-    fecha := make_date(ano + 1940, mes , dia);
-   RETURN fecha;
+    -- Generacion de la fecha de muerte, se pasan los randoms como ints y se usa la funcion make_date para crear un tipo date
+    fecha := make_date(ano + 1940, mes, dia);
+    RETURN fecha;
 END;
 $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION equipo_tecnico_completo() RETURNS DATOS_PERSONALES[][]
-AS $$
+AS
+$$
 DECLARE
     equipo_tecnico DATOS_PERSONALES[][] := '{{NULL,NULL,NULL,NULL},{NULL,NULL,NULL,NULL}}' ;
-    i smallint;
+    i              smallint;
 BEGIN
     -- Procedimiento usado para crear la matriz de Equipo tecnico, donde la primera fila corresponde a los mecanicos y la segunda al director de los pits.
-    FOR i IN 1..4 LOOP
-        equipo_tecnico[1][i] := generador_equipo_tecnico();
-    END LOOP;
+    FOR i IN 1..4
+        LOOP
+            equipo_tecnico[1][i] := generador_equipo_tecnico();
+        END LOOP;
     equipo_tecnico[2][1] := generador_equipo_tecnico();
     RETURN equipo_tecnico;
 END;
 $$ LANGUAGE plpgsql;
-
 
 -----------------------------------------
 -- Fin de Funciones de Equipo Tecnico   -
@@ -365,7 +376,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- funcion creada para calcualr el tiempo con respecto al piloto anterior
---los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto 
+--los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto
 CREATE OR REPLACE FUNCTION calcular_tiempo_anterior(distancia_recorrida_anterior real, velocidad_anterior real , distancia real) RETURNS time
 AS $$
 DECLARE
@@ -380,7 +391,7 @@ BEGIN
     --Luego se multiplicara por 60 y se dividira entra la velocidad a la que iba el piloto para saber en cuanto
     --tiempo lo alcanzara usando la velocidad media como referencia
     tiempo_faltante = ((distancia_faltante * 60) / velocidad_anterior);
-    if (tiempo_faltante - FLOOR(tiempo_faltante) > 0.60) then 
+    if (tiempo_faltante - FLOOR(tiempo_faltante) > 0.60) then
         tiempo_faltante = tiempo_faltante +  1 - 0.60;
     end if;
     --Luego se creara un tipo date armado con el tiempo
@@ -391,7 +402,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- funcion creada para calcualr el tiempo con respecto al piloto anterior
---los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto 
+--los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto
 CREATE OR REPLACE FUNCTION calcular_vueltas_hora(estadisticas estadistica[], hora int, longitud real) RETURNS real
 AS $$
 DECLARE
@@ -402,6 +413,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--funcion usada para convertir reals en tiempo
+CREATE OR REPLACE FUNCTION convertir_tiempo(tiempo real) RETURNS interval
+AS $$
+DECLARE
+    minutos int;
+    segundos real;
+BEGIN
+    minutos = FLOOR(tiempo)::int;
+    segundos = (tiempo - FLOOR(tiempo)) * 100;
+ RETURN make_interval(mins => minutos,secs => segundos);
+END;
+$$ LANGUAGE plpgsql;
 
 (select estadisticas_hora from participacion where id = 103)
 
@@ -428,3 +451,60 @@ $$ LANGUAGE plpgsql;
 
 
 
+
+
+
+
+
+--Funcion que crea la hora final
+CREATE OR REPLACE FUNCTION convertir_tiempo_final(tiempo real) RETURNS interval
+AS $$
+DECLARE
+    minutos int;
+    segundos real;
+BEGIN
+    minutos = FLOOR(tiempo)::int;
+    segundos = (tiempo - FLOOR(tiempo)) * 100;
+    -- Como es la hora final, al real que le paso hay que agregarle las 24 horas, ya que es lo que determianara el excedente
+ RETURN make_interval(hours =>24 ,mins => minutos,secs => segundos);
+END;
+$$ LANGUAGE plpgsql;
+
+(select estadisticas_hora from participacion where id = 103)
+
+create or replace function generar_falla_tecnica() returns falla_tecnica
+    language plpgsql
+as
+$$
+declare
+    random integer;
+    falla  falla_tecnica;
+begin
+    random := (porcentaje_aleatorio_entre(1, 20) * 100)::integer;
+    raise notice 'random %', random;
+    case
+        when random between 1 and 14 then
+            falla := null;
+        when random between 15 and 17 then
+            falla := row ('Cambio de cauchos', 1, make_interval(secs := porcentaje_aleatorio_entre(5, 12) * 100));
+        when random between 18 and 19 then
+            falla := row ('Cambio de frenos', 2, make_interval(secs := porcentaje_aleatorio_entre(15, 30) * 100));
+        when random = 20 then
+            falla := row ('Problema de motor', 3, null); -- este intervalo no importa, puesto que de todas formas
+        end case;
+
+    return falla;
+end;
+$$;
+
+-- Fuente: https://stackoverflow.com/a/25997497
+-- Devuelve las filas de un array bidimensional
+CREATE OR REPLACE FUNCTION unnest_2d_1d(anyarray)
+  RETURNS SETOF anyarray AS
+$func$
+SELECT array_agg($1[d1][d2])
+FROM   generate_series(array_lower($1,1), array_upper($1,1)) d1
+    ,  generate_series(array_lower($1,2), array_upper($1,2)) d2
+GROUP  BY d1
+ORDER  BY d1
+$func$  LANGUAGE sql IMMUTABLE;
