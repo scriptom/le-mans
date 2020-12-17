@@ -422,7 +422,7 @@ DECLARE
 BEGIN
     minutos = FLOOR(tiempo)::int;
     segundos = (tiempo - FLOOR(tiempo)) * 100;
- RETURN make_interval(mins => minutos,secs => segundos);
+ RETURN make_interval(hours =>24 ,mins => minutos,secs => segundos);
 END;
 $$ LANGUAGE plpgsql;
 
