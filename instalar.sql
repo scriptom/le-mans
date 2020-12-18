@@ -10,3 +10,6 @@
 \i 'inserts/motores.sql';
 \i 'inserts/vehiculos.sql';
 \i 'inserts/pilotos.sql';
+
+-- Archvo de simulación
+\i 'simulacion.sql';
