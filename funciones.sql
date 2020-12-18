@@ -99,7 +99,7 @@ begin
         velocidad_media,
         mejor_tiempo_vuelta(cantidad_vueltas),
         peor_tiempo_vuelta(cantidad_vueltas),
-        -1::smallint, -- Tenemos que recalcular la posicion una vez hayamos generado todas las estadisticas de todas las horas
+        -1::smallint, -- Usamos un numero negativo para saber que tenemos que recalcular la posicion una vez hayamos generado todas las estadisticas de lahora
         distancia_recorrida);
 end;
 $$ language plpgsql;
@@ -395,6 +395,64 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Generador aleatorio de fallas técnicas, que pueden ser aplicadas para las estadísticas por hora
+--funcion usada para convertir reals en tiempo
+CREATE OR REPLACE FUNCTION convertir_tiempo(tiempo real) RETURNS interval
+AS $$
+DECLARE
+    minutos int;
+    segundos real;
+BEGIN
+    minutos = FLOOR(tiempo)::int;
+    segundos = (tiempo - FLOOR(tiempo)) * 100;
+ RETURN make_interval(mins => minutos,secs => segundos);
+END;
+$$ LANGUAGE plpgsql;
+
+(select estadisticas_hora from participacion where id = 103)
+
+
+
+
+
+
+
+
+
+
+-- DANIEL
+
+-- funcion que devuelve la cantidad de horas que un participante estuvo en participacion
+CREATE OR REPLACE FUNCTION consulta_horas_en_carrera(estadisticas estadistica[]) RETURNS integer
+AS $$
+DECLARE
+    horas int = array_length(estadisticas,1);
+BEGIN
+RETURN horas;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+
+
+
+
+--Funcion que crea la hora final
+CREATE OR REPLACE FUNCTION convertir_tiempo_final(tiempo real) RETURNS interval
+AS $$
+DECLARE
+    minutos int;
+    segundos real;
+BEGIN
+    minutos = FLOOR(tiempo)::int;
+    segundos = (tiempo - FLOOR(tiempo)) * 100;
+    -- Como es la hora final, al real que le paso hay que agregarle las 24 horas, ya que es lo que determianara el excedente
+ RETURN make_interval(hours =>24 ,mins => minutos,secs => segundos);
+END;
+$$ LANGUAGE plpgsql;
+
+
 create or replace function generar_falla_tecnica() returns falla_tecnica
     language plpgsql
 as
