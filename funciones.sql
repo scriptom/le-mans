@@ -420,14 +420,43 @@ begin
 end;
 $$;
 
--- Fuente: https://stackoverflow.com/a/25997497
--- Devuelve las filas de un array bidimensional
-CREATE OR REPLACE FUNCTION unnest_2d_1d(anyarray)
-  RETURNS SETOF anyarray AS
-$func$
-SELECT array_agg($1[d1][d2])
-FROM   generate_series(array_lower($1,1), array_upper($1,1)) d1
-    ,  generate_series(array_lower($1,2), array_upper($1,2)) d2
-GROUP  BY d1
-ORDER  BY d1
-$func$  LANGUAGE sql IMMUTABLE;
+-- Calcula el tiempo que transcurre desde que se cumple el final de la carrera, y vuelve a cruzar la meta
+-- Parámetros
+-- cantidad_vueltas: la cantidad de vueltas totales que dio
+-- velocidad_media: La velocidad que se tuvo en la carrera
+-- longitud_circuito: La longitud total del circuito
+create or replace function calcular_tiempo_sobrante(cantidad_vueltas real, velocidad_media real, longitud_circuito real) returns interval
+    language plpgsql
+as
+$$
+declare
+    kms_restantes      real; -- Kilómetros restantes para llegar a la meta
+    recorrido_vuelta   real; -- Parte real de vuelta completado
+    distancia_restante real; -- distancia para completar la vuelta
+begin
+    -- Obtenemos la parte decimal de la cantidad de vueltas
+    recorrido_vuelta := cantidad_vueltas - floor(cantidad_vueltas);
+    -- Calculamos cuanta fracción de vuelta falta para completarla
+    distancia_restante := 1.0 - recorrido_vuelta;
+    -- Traducimos lo que valta en la distancia del circuito
+    kms_restantes := distancia_restante * longitud_circuito;
+    -- Regla de 3: si recorre velocidad_media kilómetros en 60 minutos, recorre kms_restantes en x minutos
+    return kms_restantes * make_interval(mins := 60) / velocidad_media;
+end;
+$$;
+
+-- https://stackoverflow.com/questions/44209460/how-to-transpose-two-dimension-arrays-in-postgresql
+CREATE OR REPLACE FUNCTION transpose_2d(anyarray)
+RETURNS anyarray AS $$
+SELECT array_agg(v ORDER BY j) matrix  FROM (
+    SELECT j, array_agg(v ORDER BY i) AS v FROM (
+        SELECT i, j, $1[i][j] AS v FROM (
+            SELECT generate_subscripts($1, 2) j, q.* FROM (
+                SELECT generate_subscripts($1, 1) AS i, $1
+            ) q
+        ) r
+    ) s
+     GROUP BY j
+) t
+$$ LANGUAGE sql IMMUTABLE;
+
