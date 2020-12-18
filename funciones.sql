@@ -408,8 +408,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-(select estadisticas_hora from participacion where id = 103)
-
 
 
 
