@@ -99,7 +99,7 @@ begin
         velocidad_media,
         mejor_tiempo_vuelta(cantidad_vueltas),
         peor_tiempo_vuelta(cantidad_vueltas),
-        -1::smallint, -- Usamos un numero negativo para saber que tenemos que recalcular la posicion una vez hayamos generado todas las estadisticas de lahora
+        -1::smallint, -- Tenemos que recalcular la posicion una vez hayamos generado todas las estadisticas de todas las horas
         distancia_recorrida);
 end;
 $$ language plpgsql;
@@ -108,31 +108,24 @@ create or replace function mejor_tiempo_vuelta(cantidad_vueltas real) returns in
 $$
 declare
     tiempo_mejor interval; -- tiempo medio (minutos)
-    suma         interval; -- suma de tiempos parciales para promediar
+    prom         interval; -- suma de tiempos parciales para promediar
 begin
-    tiempo_mejor := interval '60 minutes' / cantidad_vueltas;
-    suma := interval '0 minutes';
-    for _ in 1..5
-        loop
-            suma := suma + tiempo_mejor * porcentaje_aleatorio_entre(90, 99);
-        end loop;
-    return suma / 5;
+    tiempo_mejor := interval '60 minutes' / cantidad_vueltas; -- Vemos cuál es la media de tiempo por vuelta
+    select avg(tiempo_mejor * porcentaje_aleatorio_entre(90, 99)) into prom; -- Calculamos el promedio y retornamos
+    return prom;
 end;
 $$ language plpgsql;
 
+-- Estima el peor tiempo de vuelta basado en una cantidad de vueltas
 create or replace function peor_tiempo_vuelta(cantidad_vueltas real) returns interval as
 $$
 declare
     tiempo_peor interval; -- tiempo medio (en minutos)
-    suma        interval; -- suma de tiempos parciales para promediar
+    prom interval; -- Promedio de peor tiempo
 begin
-    tiempo_peor := interval '60 minutes' / cantidad_vueltas;
-    suma := interval '0 minutes';
-    for _ in 1..5
-        loop
-            suma := suma + tiempo_peor * porcentaje_aleatorio_entre(101, 110);
-        end loop;
-    return suma / 5;
+    tiempo_peor := interval '60 minutes' / cantidad_vueltas; -- Vemos cuál es la media de tiempo por vuelta
+    select avg(tiempo_peor * porcentaje_aleatorio_entre(101, 110)) into prom; -- Calculamos promedio y retornamos
+    return prom;
 end;
 $$ language plpgsql;
 
@@ -309,81 +302,68 @@ $$ LANGUAGE plpgsql;
 -----------------------------------------
 
 --Funcion utilizada para devolver la velocidad media en funcion a la cantidad de vueltas
-CREATE OR REPLACE FUNCTION consulta_velocidad_media(cantidad_vueltas smallint, longitud_cir real,hora int) RETURNS REAL
-AS $$
+CREATE OR REPLACE FUNCTION consulta_velocidad_media(cantidad_vueltas smallint, longitud_cir real, hora int) RETURNS REAL
+AS
+$$
 BEGIN
---Para los reportes se buscara la velocidad media en la carrera, par esto se necesita la cantidad de vueltas
+    --Para los reportes se buscara la velocidad media en la carrera, par esto se necesita la cantidad de vueltas
 --finales que se registraron y se dividira entre 24, se multiplicara por la distancia del circuito para
 --tener una velocidad media aproximada, ya que eso dira cuanto recorrio aproximadamente cada hora
-RETURN (cantidad_vueltas * longitud_cir)/ hora;
+    RETURN (cantidad_vueltas * longitud_cir) / hora;
 END;
 $$ LANGUAGE plpgsql;
 
 --Funcion utilizada para buscar el mejor tiempo de vuelta
 CREATE OR REPLACE FUNCTION consulta_mejor_tiempo(estadisticas estadistica[], hora int) RETURNS interval
-AS $$
+AS
+$$
 DECLARE
-    cont int = array_length(estadisticas,1);
-    mejor interval = '24:00:00';
+    mejor interval;
 BEGIN
-    -- Para buscar el mejor timpo, iteramos en el array de estadisticas hasta la hora seleccionada
-    FOR i IN 1..hora LOOP
-        if (i > array_length(estadisticas,1)) then
-            -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
-            EXIT;
-        end if;
-        if (mejor > estadisticas[i].mejor_tiempo_vuelta) then
-            -- Para saber si se tiene el tiempo mas bajo, se comprar con el mejor tiempo guardado a ver si este es menor al que se tiene guardado
-            -- si es asi, se asigna a mejor y se sigue iterando hasta llegar a los 24
-            mejor = estadisticas[i].mejor_tiempo_vuelta;
-        end if;
-    END LOOP;
-RETURN mejor;
+    select min((e).mejor_tiempo_vuelta) from unnest(estadisticas[1:hora]) e into mejor;
+    return mejor;
 END;
 $$ LANGUAGE plpgsql;
 
 --Funcion usada para calcular la distancia en vueltas con el puesto anterior
 --Los parametros serian: la distancia recorrida hasta la hora del participante anterior, la distancia recorrida del corredor y la longitud del circuito
-CREATE OR REPLACE FUNCTION consultar_vueltas_anterior(distancia_anterior real,distancia real,longitud real) RETURNS smallint
-AS $$
+CREATE OR REPLACE FUNCTION consultar_vueltas_anterior(distancia_anterior real, distancia real, longitud real) RETURNS smallint
+AS
+$$
 DECLARE
 BEGIN
     --Para saber la distancia en vueltas se va a restar las distancias recorridas en la hora
     --y se dividiran entre la longitud del circuito par sacar la cantidad de vueltas
     --luego se les hara floor para devolver una cantidad entera
-    RETURN FLOOR(cantidad_vueltas(distancia - distancia_anterior,longitud));
+    RETURN FLOOR(cantidad_vueltas(distancia - distancia_anterior, longitud));
 END;
 $$ LANGUAGE plpgsql;
 
 --Funcion utilizada para calcular la distancia que ha recorrido un participante en total
 CREATE OR REPLACE FUNCTION calcular_distancia_recorrida(estadisticas estadistica[], hora int) RETURNS real
-AS $$
+AS
+$$
 DECLARE
-    cont int = array_length(estadisticas,1);
+    cont  int  = array_length(estadisticas, 1);
     total real = 0;
 BEGIN
-    --Para calcular la distancia recorrdia, recorremos el array hasta la hora especificada
-     FOR i IN 1..hora LOOP
-        if (i > array_length(estadisticas,1)) then
-            -- Si el participante no estuvo las 24 horas, se compara el contador a la longitud del array para saber si hay que parar de iterar
-            EXIT;
-        end if;
-        --Se suma la distancia recorrida en cada iteracion del ciclo
-        total = total + estadisticas[i].distancia_recorrida;
-    END LOOP;
-    RETURN total;
+    -- Utilizamos la función de suma para ayudarnos a hacer la suma rápidamente
+    select sum((e).distancia_recorrida) from unnest(estadisticas) e into total;
+    return total;
 END;
 $$ LANGUAGE plpgsql;
 
 -- funcion creada para calcualr el tiempo con respecto al piloto anterior
 --los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto
-CREATE OR REPLACE FUNCTION calcular_tiempo_anterior(distancia_recorrida_anterior real, velocidad_anterior real , distancia real) RETURNS time
-AS $$
+CREATE OR REPLACE FUNCTION calcular_tiempo_anterior(distancia_recorrida_anterior real, velocidad_anterior real,
+                                                    distancia real) RETURNS time
+AS
+$$
 DECLARE
-   tiempo interval = '00:00:00';
-   distancia_faltante real = 0;
-   tiempo_faltante real;
-   minutos int;
+    tiempo             interval = '00:00:00';
+    distancia_faltante real     = 0;
+    tiempo_faltante    real;
+    minutos            int;
 BEGIN
     --Para calcular el tiempo se usara una regla de 3, primero se calculara la distancia que debe recorrer
     -- para alcanzar al piloto, siendo una resta de distancias
@@ -392,11 +372,11 @@ BEGIN
     --tiempo lo alcanzara usando la velocidad media como referencia
     tiempo_faltante = ((distancia_faltante * 60) / velocidad_anterior);
     if (tiempo_faltante - FLOOR(tiempo_faltante) > 0.60) then
-        tiempo_faltante = tiempo_faltante +  1 - 0.60;
+        tiempo_faltante = tiempo_faltante + 1 - 0.60;
     end if;
     --Luego se creara un tipo date armado con el tiempo
     minutos = FLOOR(tiempo_faltante::int);
-    RETURN make_time(0,minutos,(tiempo_faltante - FLOOR(tiempo_faltante))*100);
+    RETURN make_time(0, minutos, (tiempo_faltante - FLOOR(tiempo_faltante)) * 100);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -404,28 +384,27 @@ $$ LANGUAGE plpgsql;
 -- funcion creada para calcualr el tiempo con respecto al piloto anterior
 --los parametros serian: la distancia recorrida del piloto anterior, la velocidad media a la que iba en esa hora y la distancia recorrida por el piloto
 CREATE OR REPLACE FUNCTION calcular_vueltas_hora(estadisticas estadistica[], hora int, longitud real) RETURNS real
-AS $$
+AS
+$$
 DECLARE
-   distancia_recorrida real;
+    distancia_recorrida real;
 BEGIN
-    distancia_recorrida = calcular_distancia_recorrida(estadisticas,hora);
-    RETURN FLOOR(cantidad_vueltas(distancia_recorrida,longitud));
+    distancia_recorrida = calcular_distancia_recorrida(estadisticas, hora);
+    RETURN FLOOR(cantidad_vueltas(distancia_recorrida, longitud));
 END;
 $$ LANGUAGE plpgsql;
 
-
-(select estadisticas_hora from participacion where id = 103)
-
+-- Generador aleatorio de fallas técnicas, que pueden ser aplicadas para las estadísticas por hora
 create or replace function generar_falla_tecnica() returns falla_tecnica
     language plpgsql
 as
 $$
 declare
-    random integer;
-    falla  falla_tecnica;
+    random integer; -- número aleatorio para selección de falla técnica
+    falla  falla_tecnica; -- Falla Técnica a devolver. Esta puede ser: NULL, Cambio de cauchos, cambio de frenos y Problema de motor
 begin
-    random := (porcentaje_aleatorio_entre(1, 20) * 100)::integer;
-    raise notice 'random %', random;
+    random := (porcentaje_aleatorio_entre(1, 20) * 100)::integer; -- Generamos un número aleatorio entre
+    -- Dependiendo de la falla técnica generada, hay penalizaciones de tiempo posible. Estas son manejadas como intervalos
     case
         when random between 1 and 14 then
             falla := null;
@@ -434,7 +413,7 @@ begin
         when random between 18 and 19 then
             falla := row ('Cambio de frenos', 2, make_interval(secs := porcentaje_aleatorio_entre(15, 30) * 100));
         when random = 20 then
-            falla := row ('Problema de motor', 3, null); -- este intervalo no importa, puesto que de todas formas
+            falla := row ('Problema de motor', 3, null); -- este intervalo no importa, puesto que de todas formas el carro debería ser retirado
         end case;
 
     return falla;
