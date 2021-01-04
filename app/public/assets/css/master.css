@@ -1,0 +1,69 @@
+.navbar-brand, .nav-link{
+    color: white !important;
+}
+
+nav{
+    position: fixed !important;
+    width: 100%;
+    z-index: 999999;
+    background: rgb(0,2,61);
+    background: linear-gradient(0deg, rgba(0,2,61,0.9360119047619048) 0%, rgba(0,3,69,0.9780287114845938) 100%);
+    opacity: 0.92;
+}
+
+.swiper-home{
+    height: 100vh;
+}
+.swiper-slide{
+    overflow: hidden;
+}
+.contenedor-imagen-swiper{
+    height: 100%;
+}
+
+.contenedor-imagen-swiper img{
+    width: 105%;
+    height: auto;
+    position: absolute;
+    bottom: -2%;
+}
+
+.home-contenido{
+    position: absolute;
+    bottom: 3%;
+    left: 6%;
+    width: 400px;
+    z-index: 999;
+    padding: 30px;
+    border-radius: 20px;
+    background-color: rgba(0,2,61,1);
+    opacity: 0.9;
+
+}
+
+.home-contenido:hover{
+    cursor: pointer;
+    animation-name: agrandar-home-contenido;
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+}
+
+.home-contenido a{
+    color: white;
+    display: block;
+}
+.home-contenido a:hover{
+    color: white;
+    text-decoration: none;
+}
+
+@keyframes agrandar-home-contenido{
+    0%{
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
