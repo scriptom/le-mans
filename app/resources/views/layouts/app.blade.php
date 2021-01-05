@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Le Mnas</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -43,7 +43,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    Inicio
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -58,18 +58,16 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R1</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R2</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R3</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R4</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R5</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R6</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R7</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R8</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R9</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R10</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R11</a></li>
-                        <li><a class="nav-link" href="http://localhost/armatufiesta/public/tip">R12</a></li>
+                        <li><a class="nav-link" href="{{ route('reportetres.consultar') }}">R3</a></li>
+                        <li><a class="nav-link" href="#">R4</a></li>
+                        <li><a class="nav-link" href="#">R5</a></li>
+                        <li><a class="nav-link" href="#">R6</a></li>
+                        <li><a class="nav-link" href="#">R7</a></li>
+                        <li><a class="nav-link" href="#">R8</a></li>
+                        <li><a class="nav-link" href="#">R9</a></li>
+                        <li><a class="nav-link" href="#">R10</a></li>
+                        <li><a class="nav-link" href="#">R11</a></li>
+                        <li><a class="nav-link" href="#">R12</a></li>
 
                     </ul>
                 </div>

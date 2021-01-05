@@ -3,6 +3,24 @@
     padding-top: 100px;
 }
 
+
+.modal-body{
+    display: flex;
+    justify-content: center;
+}
+.modal-body img{
+    width: 60%;
+}
+.modal-dialog{
+    margin-top: 5% !important;
+}
+
+.desplegar-modal{
+    cursor: pointer;
+    color: rgb(80 102 214);
+}
+
+
 .navbar-brand, .nav-link{
     color: white !important;
 }
@@ -47,7 +65,6 @@ nav{
 }
 
 .home-contenido:hover{
-    cursor: pointer;
     animation-name: agrandar-home-contenido;
     animation-duration: 0.4s;
     animation-fill-mode: forwards;
@@ -157,9 +174,16 @@ nav{
 
 /* resultados */
 .resultados{
-    height: calc(100vh - 56px);
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 56px;
+    padding-top: 100px;
+}
+.resultados h3{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.resultados .dataTables_wrapper{
+    width: 100%;
 }
