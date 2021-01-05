@@ -39,7 +39,7 @@
     </div>
 
     <div class="home-contenido">
-        <a href="#"><p>Top Ganadores Le Mans (R3)</p></a>
+        <a href="{{ route('reportetres.consultar') }}"><p>Top Ganadores Le Mans (R3)</p></a>
         <a href="#"><p>Top Ganadores Le Mans (R3)</p></a>
         <a href="#"><p>Top Ganadores Le Mans (R3)</p></a>
         <a href="#"><p>Top Ganadores Le Mans (R3)</p></a>

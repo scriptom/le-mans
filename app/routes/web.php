@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-    
-// });
+Route::get('/', function () {
+    return view('welcome');    
+});
 
-Route::get('/', 'ReporteUnoController@index')->name('reporteuno.index');
+Route::get('/Reporte_Tres', 'ReporteTresController@consultar')->name('reportetres.consultar');
+Route::post('/Reporte_Tres/Resultados', 'ReporteTresController@resultados')->name('reportetres.resultados');

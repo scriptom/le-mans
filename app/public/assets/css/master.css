@@ -1,3 +1,8 @@
+/* generales */
+.offest-top{
+    padding-top: 100px;
+}
+
 .navbar-brand, .nav-link{
     color: white !important;
 }
@@ -44,7 +49,7 @@ nav{
 .home-contenido:hover{
     cursor: pointer;
     animation-name: agrandar-home-contenido;
-    animation-duration: 0.6s;
+    animation-duration: 0.4s;
     animation-fill-mode: forwards;
 }
 
@@ -66,4 +71,95 @@ nav{
         opacity: 1;
         transform: scale(1.05);
     }
+}
+
+
+
+
+
+/* consultar */
+
+.consultar{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.consultar-izquierda{
+    background-color: black;
+    width: 50%;
+}
+.consultar-izquierda h3{
+    text-align: center;
+    color: white;
+    padding-bottom: 40px;
+}
+.consultar-izquierda form{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.consultar-derecha{
+    width: 50%;
+    padding-top: 56px;
+    box-sizing: border-box;
+    background-color: rgb(0,2,61);
+}
+
+.consultar-derecha iframe{
+    width: 100%;
+    height: 100%;
+}
+
+.input-group{
+    padding-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input-group label{
+    color: white;
+    padding-right: 20px;
+    margin: 0px;
+}
+
+.consultar-izquierda button{
+    width: 150px;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgb(0,2,61);
+    border: none;
+    color: white;
+    font-weight: 600;
+    align-self: center;
+}
+.consultar-izquierda button:hover{
+    animation-name: agrandar-boton;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes agrandar-boton{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.06);
+    }
+}
+
+
+
+/* resultados */
+.resultados{
+    height: calc(100vh - 56px);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 56px;
 }
