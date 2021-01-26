@@ -431,7 +431,7 @@
     <created_date>2021/01/23 12:23:03.893</created_date>
     <modified_user>-</modified_user>
     <modified_date>2021/01/23 12:23:03.893</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -444,7 +444,7 @@
     <database>lemans_datamart</database>
     <port>5432</port>
     <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7828bb80da962db81bed6</password>
+    <password>Encrypted 2be98afc86aa7f2e4cb4ff7268bcafe8b</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -495,7 +495,7 @@
     <database>postgres</database>
     <port>5432</port>
     <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7828bb80da962db81bed6</password>
+    <password>Encrypted 2be98afc86aa7f2e4cb4ff7268bcafe8b</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -550,6 +550,101 @@
       <enabled>Y</enabled>
     </hop>
   </order>
+  <step>
+    <name>Añadir secuencia de ids</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>equipo_id</valuename>
+    <use_database>N</use_database>
+    <connection/>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>1</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Escritura en datamart</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <schema>public</schema>
+    <table>d_equipo</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>nombre</column_name>
+        <stream_name>nombre</stream_name>
+      </field>
+      <field>
+        <column_name>pais_origen</column_name>
+        <stream_name>pais_origen</stream_name>
+      </field>
+      <field>
+        <column_name>nacionalidad</column_name>
+        <stream_name>nacionalidad</stream_name>
+      </field>
+      <field>
+        <column_name>id</column_name>
+        <stream_name>equipo_id</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>656</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Extracción de equipos 1930</name>
     <type>TableInput</type>
@@ -651,101 +746,6 @@ join pais p on e.pais_id = p.id</sql>
     </remotesteps>
     <GUI>
       <xloc>224</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Añadir secuencia de ids</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <valuename>equipo_id</valuename>
-    <use_database>N</use_database>
-    <connection/>
-    <schema/>
-    <seqname>SEQ_</seqname>
-    <use_counter>Y</use_counter>
-    <counter_name/>
-    <start_at>1</start_at>
-    <increment_by>1</increment_by>
-    <max_value>999999999</max_value>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>432</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Escritura en datamart</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>Datamart</connection>
-    <schema>public</schema>
-    <table>d_equipo</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>nombre</column_name>
-        <stream_name>nombre</stream_name>
-      </field>
-      <field>
-        <column_name>pais_origen</column_name>
-        <stream_name>pais_origen</stream_name>
-      </field>
-      <field>
-        <column_name>nacionalidad</column_name>
-        <stream_name>nacionalidad</stream_name>
-      </field>
-      <field>
-        <column_name>id</column_name>
-        <stream_name>equipo_id</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>656</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
