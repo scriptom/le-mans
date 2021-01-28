@@ -335,6 +335,9 @@ BEGIN
     --Para saber la distancia en vueltas se va a restar las distancias recorridas en la hora
     --y se dividiran entre la longitud del circuito par sacar la cantidad de vueltas
     --luego se les hara floor para devolver una cantidad entera
+    if ((cantidad_vueltas(distancia - distancia_anterior, longitud) > 0) AND (cantidad_vueltas(distancia - distancia_anterior, longitud) < 1)) then
+        return ceiling(cantidad_vueltas(distancia - distancia_anterior, longitud));
+        end if;
     RETURN FLOOR(cantidad_vueltas(distancia - distancia_anterior, longitud));
 END;
 $$ LANGUAGE plpgsql;
@@ -516,3 +519,71 @@ SELECT array_agg(v ORDER BY j) matrix  FROM (
 ) t
 $$ LANGUAGE sql IMMUTABLE;
 
+CREATE OR REPLACE FUNCTION consultar_anterior_tiempo(id_actual int ,distancia_recorrida real, id_evento int)
+RETURNS interval 
+language plpgsql
+as $$
+DECLARE
+    id_anterior real;
+    distancia_anterior real;
+    id_evento_anterior int;
+    velocidad_anterior real;
+    dif_recorrido real;
+    tiempo_tardado real;
+    dif_tiempo  interval;
+    minutos int;
+    segundos real;
+BEGIN
+    SELECT siguiente_participacion(id_actual) INTO id_anterior;
+    SELECT calcular_distancia_recorrida(estadisticas_hora,array_length(estadisticas_hora,1)) INTO distancia_anterior FROM participacion WHERE id = id_anterior;
+    SELECT evento_id INTO id_evento_anterior FROM participacion WHERE id = id_anterior;
+    SELECT (estadisticas_hora)[array_length(estadisticas_hora,1)].vel_media  INTO velocidad_anterior FROM participacion where id = id_anterior;
+    if ((id_evento_anterior = -1) OR (id_evento_anterior != id_evento)) then
+        return 0;
+    else
+       dif_recorrido = distancia_recorrida - distancia_anterior;
+       tiempo_tardado = (dif_recorrido * 60)/velocidad_anterior;
+       minutos = floor(tiempo_tardado);
+       segundos = (tiempo_tardado - floor(tiempo_tardado))* 100;
+       return make_interval(mins => minutos, secs =>segundos);
+	end if;
+	return 0;
+end;
+$$;
+
+CREATE OR REPLACE FUNCTION siguiente_participacion(id_actual int)
+RETURNS int 
+language plpgsql
+as
+$$
+DECLARE 
+    id_sig int;
+BEGIN
+    id_sig = (select id from participacion where id= (id_actual + 2));
+    if( id_sig > 0) then
+        return id_sig;
+    else    
+        return -1;
+    end if;
+    return -1;
+end;
+$$;
+
+CREATE OR REPLACE FUNCTION consulta_velocidad_maxima(id_actual int)
+RETURNS int 
+language plpgsql
+as
+$$
+DECLARE 
+    estadisticas estadistica[];
+    horas int;
+    maximo  real;
+    i int;
+BEGIN
+    select estadisticas_hora INTO estadisticas from participacion where id = id_actual;
+    maximo = 0;
+    horas = array_length(estadisticas,1);
+    maximo = estadisticas[horas].vel_maxima;
+    return maximo;
+END;
+$$
