@@ -6,16 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ReportetresController extends Controller
+class ReporteCincoController extends Controller
 {
     public function consultar()
     {
-        $anos= DB::SELECT("select * from consultar_anos()");
-        // dd($anos);
-        $categorias= DB::SELECT("select * from consultar_vehiculos_tipo()");
-        return view('reportetres.consultar')
-        ->with('anos',$anos)
-        ->with('categorias',$categorias);
+        $pilotos= DB::SELECT("select * from consultar_vehiculos_tipo()");
+        return view('reportecinco.consultar')
+            ->with('pilotos',$pilotos);
     }
 
     public function resultados(Request $request)
@@ -27,15 +24,11 @@ class ReportetresController extends Controller
         // $bin = hex2bin($hex);
         // $b64 = base64_encode($bin);
         // dd($b64);
-        if($request->ano=='Todos'){
-            $ano=NUll;
-        }
-        else{
-            $ano=$request->ano;
-        }
-        $data= DB::SELECT("select * from reporte_tres(?, ?)", [$ano,$request->categoria]);
-        // dd($data);
-        foreach ($data as $item) {
+
+        $piloto=$request->piloto_id;
+ 
+        $data_piloto= DB::SELECT("select * from reporte_cinco_data_piloto(?)", [$piloto_id]);
+        foreach ($data_piloto as $item) {
             if($item->foto_piloto){
                 try{
                     $hex= $item->foto_piloto;
@@ -51,9 +44,14 @@ class ReportetresController extends Controller
                 }
             }
         }
-        // dd($data);
-        return view('reportetres.resultados')
-        ->with('data',$data);
+
+        $data_participaciones= DB::SELECT("select * from reporte_cinco_data_participaciones(?)", [$piloto_id]);
+
+        // nota: con la data de las participaciones se puede sacar la informacion relevante
+
+        return view('reportecinco.resultados')
+            ->with('data',$data);
+            // falta
     }
 
 

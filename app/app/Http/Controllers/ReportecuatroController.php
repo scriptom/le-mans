@@ -6,16 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ReportetresController extends Controller
+class ReportecuatroController extends Controller
 {
     public function consultar()
     {
         $anos= DB::SELECT("select * from consultar_anos()");
-        // dd($anos);
-        $categorias= DB::SELECT("select * from consultar_vehiculos_tipo()");
-        return view('reportetres.consultar')
-        ->with('anos',$anos)
-        ->with('categorias',$categorias);
+        return view('reportecuatro.consultar')
+        ->with('anos',$anos);
     }
 
     public function resultados(Request $request)
@@ -33,7 +30,7 @@ class ReportetresController extends Controller
         else{
             $ano=$request->ano;
         }
-        $data= DB::SELECT("select * from reporte_tres(?, ?)", [$ano,$request->categoria]);
+        $data= DB::SELECT("select * from reporte_cuatro(?)", [$ano]);
         // dd($data);
         foreach ($data as $item) {
             if($item->foto_piloto){
@@ -41,7 +38,6 @@ class ReportetresController extends Controller
                     $hex= $item->foto_piloto;
                     $hex= substr($hex, 5);
                     $hex= mb_substr($hex, 0, -2);
-                    // dd($hex);
                     $bin = hex2bin($hex);
                     $b64 = base64_encode($bin);
                     $item->foto_piloto= $b64;
@@ -50,9 +46,22 @@ class ReportetresController extends Controller
                     $item->foto_piloto=NULL;
                 }
             }
+            if($item->foto_vehiculo){
+                try{
+                    $hex= $item->foto_vehiculo;
+                    $hex= substr($hex, 5);
+                    $hex= mb_substr($hex, 0, -2);
+                    $bin = hex2bin($hex);
+                    $b64 = base64_encode($bin);
+                    $item->foto_vehiculo= $b64;
+                }
+                catch(Exception $e){
+                    $item->foto_vehiculo=NULL;
+                }
+            }
         }
         // dd($data);
-        return view('reportetres.resultados')
+        return view('reportecuatro.resultados')
         ->with('data',$data);
     }
 

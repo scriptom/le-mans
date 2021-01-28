@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ReportetresController extends Controller
+class ReporteTresController extends Controller
 {
     public function consultar()
     {
