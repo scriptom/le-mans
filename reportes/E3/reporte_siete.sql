@@ -1,23 +1,41 @@
 CREATE OR REPLACE FUNCTION public.reporte_siete_data(
 	inp_ano integer)
-    RETURNS TABLE(ano smallint, 
-				  piloto_edad integer, piloto_nombre varchar, piloto_pais varchar, piloto_foto_pais varchar) 
+    RETURNS TABLE(ano smallint,
+				  piloto_edad integer, piloto_nombre varchar, piloto_pais varchar, piloto_foto text)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
-
 AS $BODY$
-DECLARE 
-    aux record;
 BEGIN
-
-	aux= reporte_seis_aplanar(inp_ano);
-	select aux.ano, MIN(aux.piloto_edad), aux.piloto_nombre, aux.piloto_pais, aux.piloto_foto_pais 
-	from 
-
-		
-
+    return query
+	select df.ano::smallint          as ano,
+       pq.min_edad     as piloto_edad,
+       dp.nombre       as piloto_nombre,
+       dp.nacionalidad as piloto_pais,
+       encode(dp.foto, 'base64')         as piloto_foto
+from (select q.min_edad,
+             (case q.min_edad
+                  when p.edad_p1 then p.id_piloto1
+                  when p.edad_p2 then p.id_piloto2
+                  when p.edad_p3 then p.id_piloto3 end) as piloto_menor,
+             p.id_fecha
+      from (select least(
+                           min(case when edad_p1 <= 0 then 100 else edad_p1 end),
+                           min(case when edad_p2 <= 0 then 100 else edad_p2 end),
+                           min(case when edad_p3 <= 0 then 100 else edad_p3 end)
+                       ) as min_edad,
+                   id_fecha
+            from h_participacion h
+      join d_fecha d on h.id_fecha = d.id
+      where inp_ano is null or d.ano = inp_ano
+            group by id_fecha
+           ) as q
+               right join h_participacion p on p.id_fecha = q.id_fecha) as pq
+         join d_piloto dp on dp.id = pq.piloto_menor
+         join d_fecha df on pq.id_fecha = df.id
+where pq.piloto_menor is not null
+order by ano;
 END;
 $BODY$;
 
@@ -33,15 +51,15 @@ $BODY$;
 
 CREATE OR REPLACE FUNCTION public.reporte_seis_aplanar(
 	inp_id_ano integer)
-    RETURNS TABLE(ano smallint, 
-				  piloto_edad integer, piloto_nombre varchar, piloto_pais varchar, piloto_foto_pais varchar) 
+    RETURNS TABLE(ano smallint,
+				  piloto_edad integer, piloto_nombre varchar, piloto_pais varchar, piloto_foto_pais varchar)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
 
 AS $BODY$
-DECLARE 
+DECLARE
     var_participaciones record;
 BEGIN
 
@@ -59,29 +77,29 @@ BEGIN
 
 			where pa.id_piloto1=pi1.id and pa.id_piloto2=pi2.id and pa.id_piloto3=pi3.id
 			and pa.id_fecha=f.id
-		)  
+		)
 		LOOP
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre1; 
-			piloto_pais:= var_participaciones.piloto_pais1; 
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre1;
+			piloto_pais:= var_participaciones.piloto_pais1;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
 			piloto_edad:= var_participaciones.piloto_edad1;
-			RETURN NEXT;	
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
-			piloto_pais:= var_participaciones.piloto_pais2; 
+			RETURN NEXT;
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre2;
+			piloto_pais:= var_participaciones.piloto_pais2;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
 			piloto_edad:= var_participaciones.piloto_edad2;
 			RETURN NEXT;
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre3; 
-			piloto_pais:= var_participaciones.piloto_pais3; 
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre3;
+			piloto_pais:= var_participaciones.piloto_pais3;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
 			piloto_edad:= var_participaciones.piloto_edad3;
-			RETURN NEXT;	
+			RETURN NEXT;
 		END LOOP;
-		
-		
+
+
 	ELSE
 		FOR var_participaciones IN
 		(
@@ -96,32 +114,32 @@ BEGIN
 			where f.ano= inp_id_ano
 			and pa.id_piloto1=pi1.id and pa.id_piloto2=pi2.id and pa.id_piloto3=pi3.id
 			and pa.id_fecha=f.id
-		)  
+		)
 		LOOP
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre1; 
-			piloto_pais:= var_participaciones.piloto_pais1; 
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre1;
+			piloto_pais:= var_participaciones.piloto_pais1;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
 			piloto_edad:= var_participaciones.piloto_edad1;
-			RETURN NEXT;	
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
-			piloto_pais:= var_participaciones.piloto_pais2; 
+			RETURN NEXT;
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre2;
+			piloto_pais:= var_participaciones.piloto_pais2;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
 			piloto_edad:= var_participaciones.piloto_edad2;
 			RETURN NEXT;
-			ano:= var_participaciones.ano; 
-			piloto_nombre:= var_participaciones.piloto_nombre3; 
-			piloto_pais:= var_participaciones.piloto_pais3; 
+			ano:= var_participaciones.ano;
+			piloto_nombre:= var_participaciones.piloto_nombre3;
+			piloto_pais:= var_participaciones.piloto_pais3;
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
 			piloto_edad:= var_participaciones.piloto_edad3;
-			RETURN NEXT;	
+			RETURN NEXT;
 		END LOOP;
-	
+
 	END IF
-	
-		
-		
+
+
+
 
 END;
 $BODY$;
