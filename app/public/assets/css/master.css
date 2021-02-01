@@ -142,7 +142,7 @@ nav{
     margin: 0px;
 }
 
-.consultar-izquierda button{
+.consultar-izquierda .boton-consultar{
     width: 150px;
     padding: 12px 20px;
     display: flex;
@@ -154,7 +154,7 @@ nav{
     font-weight: 600;
     align-self: center;
 }
-.consultar-izquierda button:hover{
+.consultar-izquierda .boton-consultar:hover{
     animation-name: agrandar-boton;
     animation-duration: 0.4s;
     animation-fill-mode: forwards;
@@ -186,4 +186,22 @@ nav{
 }
 .resultados .dataTables_wrapper{
     width: 100%;
+}
+
+.resultados_bloque{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.resultados_bloque p, .resultados_bloque h5{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.resultados_bloque img{
+    width: 25%;
+    height: auto;
+    margin-bottom: 20px;
 }

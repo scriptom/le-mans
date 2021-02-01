@@ -3,14 +3,14 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">Logros por piloto</h3>
-        <form method="POST" action="{{ route('reportecinco.resultados') }}" enctype="multipart/form-data">
+        <h3 class="offest-top">Logros por modelo de auto</h3>
+        <form method="POST" action="{{ route('reporteseis.resultados') }}" enctype="multipart/form-data">
         @csrf
             <div class="input-group">
-                <label for="label-a">Seleccione el Piloto</label>
-                <select class="selectpicker show-menu-arrow" data-live-search="true" name="piloto_id" id="label-a">
-                    @foreach ($pilotos as $piloto)
-                    <option value="{{$piloto->id}}">{{$piloto->nombre}}</option>
+                <label for="label-a">Seleccione el Modelo del auto</label>
+                <select class="selectpicker show-menu-arrow" data-live-search="true" name="auto_id" id="label-a">
+                    @foreach ($autos as $auto)
+                    <option value="{{$auto->id}}">{{$auto->nombre}} - <strong>{{$auto->fabricante}}</strong></option>
                     @endforeach
                 </select>
             </div>

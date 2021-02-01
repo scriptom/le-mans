@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Le Mnas</title>
+    <title>Le Mans</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -19,7 +19,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/master.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link href="{{ asset('assets/css/bootstrap-select.min.css') }}" rel="stylesheet">
 
     <!-- swiper -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
@@ -59,15 +59,19 @@
                     <ul class="navbar-nav ml-auto">
 
                         <li><a class="nav-link" href="{{ route('reportetres.consultar') }}">R3</a></li>
-                        <li><a class="nav-link" href="#">R4</a></li>
-                        <li><a class="nav-link" href="#">R5</a></li>
-                        <li><a class="nav-link" href="#">R6</a></li>
-                        <li><a class="nav-link" href="#">R7</a></li>
-                        <li><a class="nav-link" href="#">R8</a></li>
-                        <li><a class="nav-link" href="#">R9</a></li>
-                        <li><a class="nav-link" href="#">R10</a></li>
-                        <li><a class="nav-link" href="#">R11</a></li>
-                        <li><a class="nav-link" href="#">R12</a></li>
+                        <li><a class="nav-link" href="{{ route('reportecuatro.consultar') }}">R4</a></li>
+                        <li><a class="nav-link" href="{{ route('reportecinco.consultar') }}">R5</a></li>
+                        <li><a class="nav-link" href="{{ route('reporteseis.consultar') }}">R6</a></li>
+                        <li><a class="nav-link" href="{{ route('reportesiete.consultar') }}">R7</a></li>
+                        <li><a class="nav-link" href="{{ route('reporteocho.consultar') }}">R8</a></li>
+                        <li><a class="nav-link" href="{{ route('reportenueve.consultar') }}">R9</a></li>
+                        <li><a class="nav-link" href="{{ route('reportediez.consultar') }}">R10</a></li>
+                        <li><a class="nav-link" href="{{ route('reporteonce.consultar') }}">R11</a></li>
+                        <li><a class="nav-link" href="{{ route('reportedoce.consultar') }}">R12</a></li>
+                        <li><a class="nav-link" href="{{ route('reportetrece.consultar') }}">R13</a></li>
+                        <li><a class="nav-link" href="{{ route('reportecatorce.consultar') }}">R14</a></li>
+                        <li><a class="nav-link" href="{{ route('reportequince.consultar') }}">R15</a></li>
+                        <li><a class="nav-link" href="{{ route('reportedieciseis.consultar') }}">R16</a></li>
 
                     </ul>
                 </div>
@@ -143,6 +147,8 @@
 
 <!-- datatables -->
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js"></script>
+
+<script src="{{ asset('assets/js/bootstrap-select.min.js') }}"></script>
 
 @yield('scripts')
 

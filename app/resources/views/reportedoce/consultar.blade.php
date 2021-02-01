@@ -3,16 +3,12 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">Logros por piloto</h3>
-        <form method="POST" action="{{ route('reportecinco.resultados') }}" enctype="multipart/form-data">
+        <h3 class="offest-top">Distancias mas largas</h3>
+        <form method="POST" action="{{ route('reportedoce.resultados') }}" enctype="multipart/form-data">
         @csrf
             <div class="input-group">
-                <label for="label-a">Seleccione el Piloto</label>
-                <select class="selectpicker show-menu-arrow" data-live-search="true" name="piloto_id" id="label-a">
-                    @foreach ($pilotos as $piloto)
-                    <option value="{{$piloto->id}}">{{$piloto->nombre}}</option>
-                    @endforeach
-                </select>
+                <label for="label-a">Número de participaciones</label>
+                <input name="maximo" min="1" max="500" required type="number">
             </div>
             <button class="boton-consultar" type="submit">Consultar!</button>
         </form>

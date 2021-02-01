@@ -3,14 +3,15 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">Logros por piloto</h3>
-        <form method="POST" action="{{ route('reportecinco.resultados') }}" enctype="multipart/form-data">
+        <h3 class="offest-top">Piloto mas joven</h3>
+        <form method="POST" action="{{ route('reportesiete.resultados') }}" enctype="multipart/form-data">
         @csrf
             <div class="input-group">
-                <label for="label-a">Seleccione el Piloto</label>
-                <select class="selectpicker show-menu-arrow" data-live-search="true" name="piloto_id" id="label-a">
-                    @foreach ($pilotos as $piloto)
-                    <option value="{{$piloto->id}}">{{$piloto->nombre}}</option>
+                <label for="label-a">Seleccione el año</label>
+                <select class="selectpicker show-menu-arrow" data-live-search="true" name="ano" id="label-a">
+                <option value="todos">Todos</option>
+                    @foreach ($anos as $ano)
+                    <option value="{{$ano->ano}}">{{$ano->ano}}</option>
                     @endforeach
                 </select>
             </div>
