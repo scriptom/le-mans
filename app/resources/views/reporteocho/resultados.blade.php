@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="resultados">
-<h3>Piloto mas joven</h3>
+<h3>Piloto mas veterano</h3>
 
 <div class="w-75 resultados_completo">
 

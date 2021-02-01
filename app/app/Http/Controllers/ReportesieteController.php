@@ -25,38 +25,27 @@ class ReportesieteController extends Controller
         }
 
  
-        $data= DB::SELECT("select * from reporte_siete_data(?)", [$auto_id]);
+        $data= DB::SELECT("select * from reporte_siete_data(?)", [$ano]);
         foreach ($data as $item) {
-            if($item->auto_foto){
+            if($item->piloto_foto){
                 try{
-                    $hex= $item->auto_foto;
+                    $hex= $item->piloto_foto;
                     // $hex= substr($hex, 5);
                     // $hex= mb_substr($hex, 0, -2);
                     $bin = hex2bin($hex);
                     $b64 = base64_encode($bin);
-                    $item->auto_foto= $b64;
+                    $item->piloto_foto= $b64;
                 }
                 catch(Exception $e){
-                    $item->auto_foto=NULL;
-                }
-            }
-            if($item->piloto_foto_pais){
-                try{
-                    $hex= $item->piloto_foto_pais;
-                    // $hex= substr($hex, 5);
-                    // $hex= mb_substr($hex, 0, -2);
-                    $bin = hex2bin($hex);
-                    $b64 = base64_encode($bin);
-                    $item->piloto_foto_pais= $b64;
-                }
-                catch(Exception $e){
-                    $item->piloto_foto_pais=NULL;
+                    $item->piloto_foto=NULL;
                 }
             }
         }
-//   dd($data);
+        if($data){
+            $data=$data[0];
+        }
         return view('reportesiete.resultados')
-            ->with('data',$data);
+            ->with('item',$data);
             
     }
 

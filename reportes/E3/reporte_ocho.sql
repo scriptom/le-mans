@@ -13,7 +13,7 @@ BEGIN
        pq.max_edad::integer     as piloto_edad,
        dp.nombre       as piloto_nombre,
        dp.nacionalidad as piloto_pais,
-       encode(dp.foto, 'base64')         as piloto_foto
+       encode(dp.foto, 'hex')         as piloto_foto
 from (select q.max_edad,
              (case q.max_edad
                   when p.edad_p1 then p.id_piloto1

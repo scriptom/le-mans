@@ -13,7 +13,7 @@ BEGIN
        pq.min_edad     as piloto_edad,
        dp.nombre       as piloto_nombre,
        dp.nacionalidad as piloto_pais,
-       encode(dp.foto, 'base64')         as piloto_foto
+       encode(dp.foto, 'hex')         as piloto_foto
 from (select q.min_edad,
              (case q.min_edad
                   when p.edad_p1 then p.id_piloto1
