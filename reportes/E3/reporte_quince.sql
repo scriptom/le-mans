@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.reporte_trece_autos(inp_fabricante varchar)
+CREATE OR REPLACE FUNCTION public.reporte_quince_autos(inp_fabricante varchar)
     RETURNS TABLE(nombre varchar, pais varchar, numero_victorias integer) 
     LANGUAGE 'plpgsql'
     COST 100
@@ -40,7 +40,7 @@ $BODY$;
 
 
 
-CREATE OR REPLACE FUNCTION public.reporte_trece_cauchos(inp_fabricante varchar)
+CREATE OR REPLACE FUNCTION public.reporte_quince_cauchos(inp_fabricante varchar)
     RETURNS TABLE(nombre varchar, numero_victorias integer) 
     LANGUAGE 'plpgsql'
     COST 100
