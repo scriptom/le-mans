@@ -440,7 +440,7 @@ $$ LANGUAGE plpgsql;
 
 
 --Funcion que crea la hora final
-CREATE OR REPLACE FUNCTION convertir_tiempo_final(tiempo real) RETURNS interval
+CREATE OR REPLACE FUNCTION convertir_tiempo_final(tiempo real, horas integer) RETURNS interval
 AS $$
 DECLARE
     minutos int;
@@ -449,7 +449,7 @@ BEGIN
     minutos = FLOOR(tiempo)::int;
     segundos = (tiempo - FLOOR(tiempo)) * 100;
     -- Como es la hora final, al real que le paso hay que agregarle las 24 horas, ya que es lo que determianara el excedente
- RETURN make_interval(hours =>24 ,mins => minutos,secs => segundos);
+ RETURN make_interval(hours => horas, mins => minutos,secs => segundos);
 END;
 $$ LANGUAGE plpgsql;
 

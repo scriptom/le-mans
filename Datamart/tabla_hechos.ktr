@@ -437,14 +437,65 @@
   <notepads>
   </notepads>
   <connection>
-    <name>lemas_1930</name>
+    <name>Datamart</name>
+    <server>localhost</server>
+    <type>POSTGRESQL</type>
+    <access>Native</access>
+    <database>lemans_datamart</database>
+    <port>5432</port>
+    <username>postgres</username>
+    <password>Encrypted 2be98afc86aa7828bb80da962db81bed6</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>5432</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>grupo2_decada_1930</name>
     <server>localhost</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
     <database>postgres</database>
     <port>5432</port>
     <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb4ff7268bcafe8b</password>
+    <password>Encrypted 2be98afc86aa7828bb80da962db81bed6</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -488,6 +539,91 @@
     </attributes>
   </connection>
   <order>
+    <hop>
+      <from>Analytic query</from>
+      <to>Calcular diferencias con puesto anterior</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Table input</from>
+      <to>Select values</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values</from>
+      <to>Analytic query</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>If field value is null</from>
+      <to>Modified JavaScript value</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Buscar ID vehiculos</from>
+      <to>Buscar ID equipos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Buscar ID equipos</from>
+      <to>Buscar ID pilotos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Buscar ID pilotos</from>
+      <to>Buscar ID pilotos 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Buscar ID pilotos 2</from>
+      <to>Buscar ID pilotos 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fecha a string</from>
+      <to>String a fecha 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calcular edades</from>
+      <to>Fecha a string</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>String a fecha</from>
+      <to>Calcular edades</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Modified JavaScript value</from>
+      <to>Buscar ID vehiculos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Limpieza de flujo</from>
+      <to>String a fecha</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calcular diferencias con puesto anterior</from>
+      <to>If field value is null</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Buscar ID pilotos 3</from>
+      <to>Limpieza de flujo</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>String a fecha 2</from>
+      <to>Añadir secuencia de ids</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Añadir secuencia de ids</from>
+      <to>Execute SQL script</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <step>
     <name>Table input</name>
@@ -500,21 +636,70 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>lemas_1930</connection>
-    <sql>SELECT p.evento_id as evento_id, p.numero_participacion, p.puesto_inicio as puesto_final, (case when p.finalizo then 'S' else 'N' end) as finalizo,
- p.numero_vueltas as cantidad_vueltas,(select calcular_distancia_recorrida(p.estadisticas_hora,array_length(estadisticas_hora,1))) as distancia_recorrida,
- (select consultar_anterior_tiempo(p.id,(select calcular_distancia_recorrida(p.estadisticas_hora,array_length(estadisticas_hora,1))),p.evento_id)) as calcular_tiempo_anterior,
-(select consultar_vueltas_anterior((select calcular_distancia_recorrida(estadisticas_hora,array_length(estadisticas_hora,1)) from participacion where id = (select siguiente_participacion(p.id))), (select calcular_distancia_recorrida(p.estadisticas_hora,array_length(estadisticas_hora,1))),(select longitud from evento where id = p.evento_id)) as vueltas_anterior),
-(select consulta_velocidad_media(p.numero_vueltas,(select longitud from evento where id = p.evento_id),array_length(estadisticas_hora,1))) as velocidad_media,
-(select consulta_velocidad_maxima(p.id)) as velocidad_maxima
- from participacion p;</sql>
+    <connection>grupo2_decada_1930</connection>
+    <sql>SELECT p.id                                                             as id,
+       p.evento_id                                                      as evento_id,
+       eq.nombre                                                        as equipo,
+       v.nombre_chasis                                                  as vehiculo,
+       (select obtener_identificacion(piloto.datos)
+        from piloto
+        where id = (select array(select pp.piloto_id
+                                 from piloto_participacion pp
+                                 where pp.participacion_id = p.id))[1]) as piloto_1,
+       (select obtener_identificacion(piloto.datos)
+        from piloto
+        where id = (select array(select pp.piloto_id
+                                 from piloto_participacion pp
+                                 where pp.participacion_id = p.id))[2]) as piloto_2,
+	   null as piloto_3,
+       p.numero_participacion                                           as numero_participacion,
+       p.tiempo_total                                                   as tiempo_total,
+       p.puesto_inicio                                                  as puesto_final,
+       (case when p.finalizo then 'S' else 'N' end)                     as finalizo,
+       p.numero_vueltas                                                 as cantidad_vueltas,
+       (select sum((est).distancia_recorrida)
+        from unnest(estadisticas_hora) as est)                          as distancia_recorrida,
+       (select max((est).vel_maxima)
+        from unnest(estadisticas_hora) as est)                          as velocidad_maxima,
+       (select avg((est).vel_media)
+        from unnest(estadisticas_hora) as est)                          as velocidad_media,
+       e.ano                                                            as ano
+from participacion p
+         join evento e on e.id = p.evento_id
+         join equipo eq on p.equipo_id = eq.id
+         join vehiculo v on p.vehiculo_id = v.id
+where e.tipo = 'carrera'
+order by evento_id, puesto_final</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
+    <cached_row_meta_active>Y</cached_row_meta_active>
     <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>id</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>Table input</origin>
+        <comments>id</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
@@ -539,6 +724,121 @@
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
       <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>equipo</name>
+        <length>40</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>equipo</comments>
+        <conversion_Mask/>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>vehiculo</name>
+        <length>40</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>vehiculo</comments>
+        <conversion_Mask/>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>piloto_1</name>
+        <length>2147483647</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>piloto_1</comments>
+        <conversion_Mask/>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>piloto_2</name>
+        <length>2147483647</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>piloto_2</comments>
+        <conversion_Mask/>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>piloto_3</name>
+        <length>2147483647</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>piloto_3</comments>
+        <conversion_Mask/>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
         <name>numero_participacion</name>
@@ -547,6 +847,29 @@
         <origin>Table input</origin>
         <comments>numero_participacion</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>,</decimal_symbol>
+        <grouping_symbol>.</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_VE</date_format_locale>
+        <date_format_timezone>America/Caracas</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>tiempo_total</name>
+        <length>-1</length>
+        <precision>6</precision>
+        <origin>Table input</origin>
+        <comments>tiempo_total</comments>
+        <conversion_Mask/>
         <decimal_symbol>,</decimal_symbol>
         <grouping_symbol>.</grouping_symbol>
         <currency_symbol/>
@@ -654,37 +977,14 @@
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
       <value-meta>
-        <type>String</type>
+        <type>Number</type>
         <storagetype>normal</storagetype>
-        <name>calcular_tiempo_anterior</name>
-        <length>-1</length>
-        <precision>6</precision>
+        <name>velocidad_maxima</name>
+        <length>8</length>
+        <precision>8</precision>
         <origin>Table input</origin>
-        <comments>calcular_tiempo_anterior</comments>
-        <conversion_Mask/>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_VE</date_format_locale>
-        <date_format_timezone>America/Caracas</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>vueltas_anterior</name>
-        <length>4</length>
-        <precision>0</precision>
-        <origin>Table input</origin>
-        <comments>vueltas_anterior</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
+        <comments>velocidad_maxima</comments>
+        <conversion_Mask>####0.0#########;-####0.0#########</conversion_Mask>
         <decimal_symbol>,</decimal_symbol>
         <grouping_symbol>.</grouping_symbol>
         <currency_symbol/>
@@ -703,8 +1003,8 @@
         <type>Number</type>
         <storagetype>normal</storagetype>
         <name>velocidad_media</name>
-        <length>8</length>
-        <precision>8</precision>
+        <length>-1</length>
+        <precision>-1</precision>
         <origin>Table input</origin>
         <comments>velocidad_media</comments>
         <conversion_Mask>####0.0#########;-####0.0#########</conversion_Mask>
@@ -725,11 +1025,11 @@
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>velocidad_maxima</name>
-        <length>9</length>
+        <name>ano</name>
+        <length>4</length>
         <precision>0</precision>
         <origin>Table input</origin>
-        <comments>velocidad_maxima</comments>
+        <comments>ano</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>,</decimal_symbol>
         <grouping_symbol>.</grouping_symbol>
@@ -755,8 +1055,1054 @@
       </output>
     </remotesteps>
     <GUI>
+      <xloc>0</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Analytic query</name>
+    <type>AnalyticQuery</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <group>
+      <field>
+        <name>evento_id</name>
+      </field>
+      <field>
+        <name>finalizo</name>
+      </field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>tiempo_anterior</aggregate>
+        <subject>tiempo_total</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>vueltas_anterior</aggregate>
+        <subject>cantidad_vueltas</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>272</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Calcular diferencias con puesto anterior</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <failIfNoFile>Y</failIfNoFile>
+    <calculation>
+      <field_name>diferencia_vueltas_anterior</field_name>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>vueltas_anterior</field_a>
+      <field_b>cantidad_vueltas</field_b>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>temp</field_name>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>tiempo_total</field_a>
+      <field_b>tiempo_anterior</field_b>
+      <field_c/>
+      <value_type>Number</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>Y</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>diferencia_tiempo_anterior</field_name>
+      <calc_type>ABS</calc_type>
+      <field_a>temp</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>Date</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask>mm:ss.SSS</conversion_mask>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>448</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>tiempo_total</name>
+        <rename>tiempo_total</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>kk:mm:ss.SSS</conversion_mask>
+        <date_format_lenient>true</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>cantidad_vueltas</name>
+        <rename>cantidad_vueltas</rename>
+        <type>Number</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>144</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>If field value is null</name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <replaceAllByValue/>
+    <replaceAllMask/>
+    <selectFields>Y</selectFields>
+    <selectValuesType>N</selectValuesType>
+    <setEmptyStringAll>N</setEmptyStringAll>
+    <valuetypes>
+      </valuetypes>
+    <fields>
+      <field>
+        <name>diferencia_vueltas_anterior</name>
+        <value>0</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>piloto_3</name>
+        <value>Desconocido</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>diferencia_tiempo_anterior</name>
+        <value>00:00.000</value>
+        <mask>mm:ss.SSS</mask>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Modified JavaScript value</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>//Script here
+
+if(1930==ano)
+var fecha_evento = "1930-06-22";
+else if (1931==ano)
+var fecha_evento = "1931-06-13";
+else if (1932==ano)
+var fecha_evento = "1932-06-18";
+else if (1933==ano)
+var fecha_evento = "1933-06-17";
+else if (1934==ano)
+var fecha_evento = "1934-06-16";
+else if (1935==ano)
+var fecha_evento = "1935-06-15";
+else if (1937==ano)
+var fecha_evento = "1937-06-19";
+else if (1938==ano)
+var fecha_evento = "1938-06-18";
+else if (1939==ano)
+var fecha_evento = "1939-06-17";
+else if (1949==ano)
+var fecha_evento = "1949-06-24";
+else if (1950==ano)
+var fecha_evento = "1950-06-24";
+else if (1951==ano)
+var fecha_evento = "1951-06-23";
+else if (1952==ano)
+var fecha_evento = "1952-06-14";
+else if (1953==ano)
+var fecha_evento = "1953-06-13";
+else if (1954==ano)
+var fecha_evento = "1954-06-12";
+else if (1955==ano)
+var fecha_evento = "1955-06-11";
+else if (1956==ano)
+var fecha_evento = "1956-06-28";
+else if (1957==ano)
+var fecha_evento = "1957-06-22";
+else if (1958==ano)
+var fecha_evento = "1958-06-21";
+else if (1959==ano)
+var fecha_evento = "1959-06-20";
+else if (1960==ano)
+var fecha_evento = "1960-06-25";
+</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>fecha_evento</name>
+        <rename>fecha_evento</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>944</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar ID vehiculos</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>d_vehiculo</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>vehiculo</name>
+        <field>nombre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>id_vehiculo</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>944</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar ID equipos</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>d_equipo</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>equipo</name>
+        <field>nombre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>id_equipo</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>784</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar ID pilotos</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>d_piloto</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>piloto_1</name>
+        <field>nombre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>id_piloto1</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>fecha_nacimiento</name>
+        <rename>nacimiento_piloto_1</rename>
+        <default/>
+        <type>Date</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar ID pilotos 2</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>d_piloto</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>piloto_2</name>
+        <field>nombre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>id_piloto2</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>fecha_nacimiento</name>
+        <rename>nacimiento_piloto_2</rename>
+        <default/>
+        <type>Date</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>528</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar ID pilotos 3</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>public</schema>
+      <table>d_piloto</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>piloto_3</name>
+        <field>nombre</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>id_piloto3</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>fecha_nacimiento</name>
+        <rename>nacimiento_piloto_3</rename>
+        <default/>
+        <type>Date</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>384</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Fecha a string</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>nacimiento_piloto_1</name>
+      </remove>
+      <remove>
+        <name>nacimiento_piloto_2</name>
+      </remove>
+      <remove>
+        <name>nacimiento_piloto_3</name>
+      </remove>
+      <meta>
+        <name>fecha_evento</name>
+        <rename>fecha_evento</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyyMMdd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>diferencia_tiempo_anterior</name>
+        <rename>diferencia_tiempo_anterior</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>mm 'minutes' ss 'seconds' SSS 'milliseconds'</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
       <xloc>224</xloc>
-      <yloc>256</yloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>String a fecha 2</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>id</name>
+      </remove>
+      <remove>
+        <name>evento_id</name>
+      </remove>
+      <meta>
+        <name>fecha_evento</name>
+        <rename>fecha_evento</rename>
+        <type>Number</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>#</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Calcular edades</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formula>
+      <field_name>edad_piloto_1</field_name>
+      <formula_string>DATEDIF([nacimiento_piloto_1];[fecha_evento];"y")</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <formula>
+      <field_name>edad_piloto_2</field_name>
+      <formula_string>DATEDIF([nacimiento_piloto_2];[fecha_evento];"y")</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <formula>
+      <field_name>edad_piloto_3</field_name>
+      <formula_string>DATEDIF([nacimiento_piloto_3];[fecha_evento];"y")</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>48</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>String a fecha</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>fecha_evento</name>
+        <rename>fecha_evento</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>48</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Limpieza de flujo</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>ano</name>
+      </remove>
+      <remove>
+        <name>piloto_1</name>
+      </remove>
+      <remove>
+        <name>piloto_2</name>
+      </remove>
+      <remove>
+        <name>piloto_3</name>
+      </remove>
+      <remove>
+        <name>equipo</name>
+      </remove>
+      <remove>
+        <name>vehiculo</name>
+      </remove>
+      <remove>
+        <name>vueltas_anterior</name>
+      </remove>
+      <remove>
+        <name>tiempo_anterior</name>
+      </remove>
+      <meta>
+        <name>nacimiento_piloto_1</name>
+        <rename>nacimiento_piloto_1</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>nacimiento_piloto_2</name>
+        <rename>nacimiento_piloto_2</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>nacimiento_piloto_3</name>
+        <rename>nacimiento_piloto_3</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>evento_id</name>
+        <rename>evento_id</rename>
+        <type>None</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>224</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Añadir secuencia de ids</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>id</valuename>
+    <use_database>N</use_database>
+    <connection>grupo2_decada_1930</connection>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>1</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Execute SQL script</name>
+    <type>ExecSQL</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>Datamart</connection>
+    <execute_each_row>Y</execute_each_row>
+    <single_statement>N</single_statement>
+    <replace_variables>N</replace_variables>
+    <quoteString>N</quoteString>
+    <sql>insert into h_participacion(id, id_equipo, id_vehiculo, id_fecha, id_piloto1, edad_p1, id_piloto2, edad_p2, id_piloto3, edad_p3, numero_participacion, puesto_final, finalizo, cantidad_vueltas, distancia_recorrida, diferencia_puesto_anterior_tiempo, diferencia_puesto_anterior_vueltas, velocidad_media, velocidad_maxima) VALUES
+(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::interval, ?, ?, ?)
+</sql>
+    <set_params>Y</set_params>
+    <insert_field/>
+    <update_field/>
+    <delete_field/>
+    <read_field/>
+    <arguments>
+      <argument>
+        <name>id</name>
+      </argument>
+      <argument>
+        <name>id_equipo</name>
+      </argument>
+      <argument>
+        <name>id_vehiculo</name>
+      </argument>
+      <argument>
+        <name>fecha_evento</name>
+      </argument>
+      <argument>
+        <name>id_piloto1</name>
+      </argument>
+      <argument>
+        <name>edad_piloto_1</name>
+      </argument>
+      <argument>
+        <name>id_piloto2</name>
+      </argument>
+      <argument>
+        <name>edad_piloto_2</name>
+      </argument>
+      <argument>
+        <name>id_piloto3</name>
+      </argument>
+      <argument>
+        <name>edad_piloto_3</name>
+      </argument>
+      <argument>
+        <name>numero_participacion</name>
+      </argument>
+      <argument>
+        <name>puesto_final</name>
+      </argument>
+      <argument>
+        <name>finalizo</name>
+      </argument>
+      <argument>
+        <name>cantidad_vueltas</name>
+      </argument>
+      <argument>
+        <name>distancia_recorrida</name>
+      </argument>
+      <argument>
+        <name>diferencia_tiempo_anterior</name>
+      </argument>
+      <argument>
+        <name>diferencia_vueltas_anterior</name>
+      </argument>
+      <argument>
+        <name>velocidad_media</name>
+      </argument>
+      <argument>
+        <name>velocidad_maxima</name>
+      </argument>
+    </arguments>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>848</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
