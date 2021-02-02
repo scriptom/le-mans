@@ -315,7 +315,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/wamp64/www/le-mans/Datamart/dimension_fecha.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/dimension_fecha.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -485,7 +485,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>528</xloc>
+      <xloc>560</xloc>
       <yloc>464</yloc>
       <attributes_kjc/>
     </entry>
@@ -505,7 +505,7 @@
       <to>Cargar Dimension Piloto</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>

@@ -315,7 +315,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>C:/wamp64/www/le-mans/Datamart/Cargar_Dimensiones.kjb</filename>
+      <filename>${Internal.Entry.Current.Directory}/Cargar_Dimensiones.kjb</filename>
       <jobname/>
       <directory/>
       <arg_from_previous>N</arg_from_previous>
@@ -352,7 +352,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/wamp64/www/le-mans/Datamart/tabla_hechos.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/tabla_hechos.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -405,7 +405,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
+      <xloc>336</xloc>
       <yloc>224</yloc>
       <attributes_kjc/>
     </entry>
