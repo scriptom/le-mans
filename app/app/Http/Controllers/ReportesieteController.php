@@ -41,11 +41,9 @@ class ReportesieteController extends Controller
                 }
             }
         }
-        if($data){
-            $data=$data[0];
-        }
+
         return view('reportesiete.resultados')
-            ->with('item',$data);
+            ->with('data',$data);
             
     }
 

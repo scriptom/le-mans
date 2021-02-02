@@ -17,7 +17,7 @@
         </tr>
     </thead>
     <tbody>
-
+          @foreach($data as $item)
             <tr>
                 <td>{{$item->ano}}</td>
                 <td>{{$item->piloto_edad}}</td>
@@ -28,6 +28,7 @@
                     @endif
                     <td>{{$item->piloto_pais}}</td>
             </tr>
+          @endforeach  
 
     </tbody>
 </table>

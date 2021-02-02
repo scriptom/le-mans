@@ -12,7 +12,8 @@ BEGIN
 
 -- funcion que retorna los pilotos
     FOR var_r IN(
-select d_piloto.id as Id, d_piloto.nombre as Nombre from d_piloto
+		select d_piloto.id as Id, d_piloto.nombre as Nombre from d_piloto
+		where d_piloto.id<>0
 
 	)  
     LOOP
@@ -71,6 +72,7 @@ BEGIN
 select distinct f.ano
 from d_fecha as f, h_participacion as pa
 where pa.id_fecha=f.id
+order by 1 asc
 
 	)  
     LOOP

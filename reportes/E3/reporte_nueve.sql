@@ -51,6 +51,7 @@ BEGIN
 		FOR var_r IN
 			(
 				select pi.id as id from d_piloto pi
+				where pi.id<>0
 			)  
 		LOOP
 			select * INTO aux from reporte_nueve_contador(var_r.id);

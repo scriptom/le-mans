@@ -41,11 +41,8 @@ class ReporteochoController extends Controller
                 }
             }
         }
-        if($data){
-            $data=$data[0];
-        }
         return view('reporteocho.resultados')
-            ->with('item',$data);
+            ->with('data',$data);
             
     }
 

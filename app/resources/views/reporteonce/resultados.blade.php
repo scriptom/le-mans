@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="resultados">
-<h3>Ganadores en su primera participación</h3>
+<h3>Velocidades Medias mas altas</h3>
 
 <div class="w-75 resultados_completo">
 
