@@ -3,19 +3,19 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">Mayores Ganadores en Le Mans</h3>
+        <h3 class="offest-top">Resultados por número de equipo</h3>
         <form method="POST" action="{{ route('reportecuatro.resultados') }}" enctype="multipart/form-data">
         @csrf
             <div class="input-group">
-                <label for="ano">Seleccione el Año</label>
-                <select name="ano" id="ano">
-                <option value="Todos">Todos</option>
+                <label for="label-a">Seleccione el año</label>
+                <select class="selectpicker show-menu-arrow" data-live-search="true" name="ano" id="label-a">
+                <option value="todos">Todos</option>
                     @foreach ($anos as $ano)
                     <option value="{{$ano->ano}}">{{$ano->ano}}</option>
                     @endforeach
                 </select>
             </div>
-            <button type="submit">Consultar!</button>
+            <button class="boton-consultar" type="submit">Consultar!</button>
         </form>
     </div>
     <div class="consultar-derecha">

@@ -2,46 +2,81 @@
 @section('content')
 
 <div class="resultados">
-    <h3>Mayores Ganadores Le Mans</h3>
+<h3>Resultados por numero de equipo</h3>
 
-    <table id="r3" class="table">
-        <thead>
+<div class="w-100 resultados_completo">
+
+<table id="r3" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Número Equipo</th>
+            <th scope="col">Nacionalidad Equipo</th>
+            <th scope="col">Vehículo</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Motor</th>
+            <th scope="col">Piloto</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Puesto</th>
+            <th scope="col">Vueltas</th>
+            <th scope="col">Distancia R.</th>
+            <th scope="col">Diferencia Anterior</th>
+
+        </tr>
+    </thead>
+    <tbody>
+          @foreach($data as $item)
             <tr>
-                <th scope="col">Año</th>
-                <th scope="col">Equipo</th>
-                <th scope="col">Numero Equipo</th>
-                <th scope="col">Nacionalidad Equipo</th>
-                <th scope="col">Piloto</th>
-                <th scope="col">Nacionalidad Piloto</th>
-                <th scope="col">Vehiculo</th>
-                <th scope="col">Tipo Vehiculo</th>
-                <th scope="col">Motor Vehiculo</th>
+                <td>{{$item->ano}}</td>
+
+                <td>{{$item->numero_equipo}}</td>
+
+                <td>{{$item->equipo_nacionalidad}}</td>
+
+                @if($item->auto_foto)
+                    <td imagen="{{$item->auto_foto}}" class="desplegar-modal">{{$item->auto_modelo}}</td>
+                @else
+                    <td>{{$item->auto_modelo}}</td>
+                @endif
+
+                <td>{{$item->auto_categoria}}</td>
+
+                <td>{{$item->auto_motor}}</td>
+
+
+                @if($item->piloto_foto)
+                  <td imagen="{{$item->piloto_foto}}" class="desplegar-modal">{{$item->piloto_nombre}}</td>
+                @else
+                  <td>{{$item->piloto_nombre}}</td>
+                @endif
+    
+                <td>
+                @if($item->piloto_foto_pais)
+                <span><img style="width: 25px; height: auto; margin:0px" src="data:image/jpeg;base64,{{$item->piloto_foto_pais}}" alt="Base 64 encoded!" /></span>
+                @endif
+                {{$item->piloto_pais}}
+                </td>
+
+                <td>{{$item->puesto_final}}</td>
+
+                <td>{{$item->cantidad_vueltas}}</td>
+
+                <td>{{$item->distancia_recorrida}}</td>
+
+                <td>{{$item->diferencia_puesto_anterior_vueltas}}V - {{$item->diferencia_puesto_anterior_tiempo}}</td>
+
+
+
+
             </tr>
-        </thead>
-        <tbody>
-            @foreach ($data as $item)
-                <tr>
-                    <td>{{$item->ano}}</td>
-                    <td>{{$item->nombre_equipo}}</td>
-                    <td>{{$item->numero_equipo}}</td>
-                    <td>{{$item->nacionalidad_equipo}}</td>
-                    @if($item->foto_piloto)
-                        <td imagen="{{$item->foto_piloto}}" class="desplegar-modal">{{$item->nombre_piloto}}</td>
-                    @else
-                        <td>{{$item->nombre_piloto}}</td>
-                    @endif
-                    <td>{{$item->nacionalidad_piloto}}</td>
-                    @if($item->foto_vehiculo)
-                        <td imagen="{{$item->foto_vehiculo}}" class="desplegar-modal">{{$item->vehiculo}}</td>
-                    @else
-                        <td>{{$item->vehiculo}}</td>
-                    @endif
-                    <td>{{$item->tipo_vehiculo}}</td>
-                    <td>{{$item->motor_vehiculo}}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+          @endforeach  
+
+    </tbody>
+</table>
+
+</div>
+
+
 
 <div id="myModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -62,13 +97,10 @@
   </div>
 </div>
 
-    <!-- <img src="data:image/jpeg;base64,{{$data[0]->foto_piloto}}" alt="Base 64 encoded!" /> -->
 
 </div>
 
 @endsection
-
-
 
 @section('scripts')
 <script>

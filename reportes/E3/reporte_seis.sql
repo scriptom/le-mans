@@ -48,7 +48,7 @@ BEGIN
 			auto_foto:= var_participaciones.auto_foto; 
 			auto_modelo:= var_participaciones.auto_modelo; 
 			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
+			piloto_nombre:= var_participaciones.piloto_nombre1; 
 			piloto_pais:= var_participaciones.piloto_pais1; 
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
 			auto_motor:= var_participaciones.auto_motor;
