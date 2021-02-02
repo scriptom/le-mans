@@ -58,7 +58,6 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <li><a class="nav-link" href="{{ route('reportetres.consultar') }}">R3</a></li>
                         <li><a class="nav-link" href="{{ route('reportecuatro.consultar') }}">R4</a></li>
                         <li><a class="nav-link" href="{{ route('reportecinco.consultar') }}">R5</a></li>
                         <li><a class="nav-link" href="{{ route('reporteseis.consultar') }}">R6</a></li>

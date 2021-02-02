@@ -39,7 +39,6 @@
     </div>
 
     <div class="home-contenido">
-        <a href="{{ route('reportetres.consultar') }}"><p>Top Ganadores Le Mans (R3)</p></a>
         <a href="{{ route('reportecuatro.consultar') }}"><p>Resultados por número de equipo (R4)</p></a>
         <a href="{{ route('reportecinco.consultar') }}"><p>Losgros por piloto (R5)</p></a>
         <a href="{{ route('reporteseis.consultar') }}"><p>Paticipaciones por marca y modelo de auto (R6)</p></a>
