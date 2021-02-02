@@ -3,27 +3,9 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">Logros por fabricante de vehiculos/cauchos</h3>
+        <h3 class="offest-top">En el pódium, pero nunca ganadores</h3>
         <form method="POST" action="{{ route('reportetrece.resultados') }}" enctype="multipart/form-data">
-        @csrf
-            <div class="input-group">
-                
-                <label for="label-a"><input id="check_fabricante" name="check_fabricante" class="mr-1" type="checkbox">Filtrar por Fabricante de autos</label>
-                <select class="selectpicker show-menu-arrow" data-live-search="true" name="fabricante" id="label-a">
-                    @foreach ($fabricantes as $fabricante)
-                    <option value="{{$fabricante->fabricante}}">{{$fabricante->fabricante}}</strong></option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="input-group">
-            <label for="label-a"><input id="check_fabricante_cauchos" name="check_fabricante_cauchos" class="mr-1" type="checkbox">Filtrar por Fabricante de cauchos</label>
-                <select class="selectpicker show-menu-arrow" data-live-search="true" name="fabricante_cauchos" id="label-a">
-                    @foreach ($fabricantes_cauchos as $fabricante)
-                    <option value="{{$fabricante->fabricante_caucho}}">{{$fabricante->fabricante_caucho}}</strong></option>
-                    @endforeach
-                </select>
-            </div>            
+        @csrf          
             <button class="boton-consultar" type="submit">Consultar!</button>
         </form>
     </div>

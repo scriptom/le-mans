@@ -10,30 +10,32 @@ class ReportetreceController extends Controller
 {
     public function consultar()
     {
-        $fabricantes_cauchos= DB::SELECT("select * from consultar_fabricantes_cauchos()");
-        $fabricantes= DB::SELECT("select * from consultar_fabricantes()");
-        return view('reportetrece.consultar')
-            ->with('fabricantes',$fabricantes)
-            ->with('fabricantes_cauchos',$fabricantes_cauchos);
+        return view('reportetrece.consultar');
     }
 
     public function resultados(Request $request)
     {
- 
-        // dd($request->all());
-        if($request->check_fabricante){
-            $data= DB::SELECT("select * from reporte_trece_autos(?)", [$request->fabricante]);
-            $b_autos= 1;
-        }
-        else{
-            $data= DB::SELECT("select * from reporte_trece_cauchos(?)", [$request->fabricante_cauchos]);
-            $b_autos= 0;           
+
+        $data= DB::SELECT("select * from reporte_trece()");
+        foreach ($data as $item) {
+            if($item->foto){
+                try{
+                    $hex= $item->foto;
+                    // $hex= substr($hex, 5);
+                    // $hex= mb_substr($hex, 0, -2);
+                    $bin = hex2bin($hex);
+                    $b64 = base64_encode($bin);
+                    $item->foto= $b64;
+                }
+                catch(Exception $e){
+                    $item->foto=NULL;
+                }
+            }
         }
 
 //   dd($data);
         return view('reportetrece.resultados')
-            ->with('data',$data)
-            ->with('b_autos',$b_autos);
+            ->with('data',$data);
             
     }
 

@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="resultados">
-<h3>En el pódium, pero nunca ganadores</h3>
+<h3>Cantidad de victorias por fabricante</h3>
 
 <div class="w-75 resultados_completo">
 
@@ -10,21 +10,21 @@
     <thead>
         <tr>
             <th scope="col">Nombre</th>
-            <th scope="col">Nacionalidad</th>
-            <th scope="col">Número de podiums</th>
+            @if($b_autos)
+            <th scope="col">País</th>
+            @endif
+            <th scope="col">Número de victorias</th>
  
         </tr>
     </thead>
     <tbody>
         @foreach ($data as $item)
             <tr>
-                  @if($item->foto)
-                        <td imagen="{{$item->foto}}" class="desplegar-modal">{{$item->nombre}}</td>
-                    @else
-                        <td>{{$item->nombre}}</td>
-                    @endif  
-                <td>{{$item->nacionalidad}}</td>
-                <td>{{$item->num_podiums}}</td>
+                <td>{{$item->nombre}}</td>
+                @if($b_autos==1)
+                <td>{{$item->pais}}</td>
+                @endif
+                <td>{{$item->numero_victorias}}</td>
             </tr>
         @endforeach
     </tbody>

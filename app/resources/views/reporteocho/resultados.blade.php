@@ -12,7 +12,7 @@
             <th scope="col">Año Carrera</th>
             <th scope="col">Edad</th>
             <th scope="col">Nombre</th>
-            <th scope="col">País</th>
+            <th scope="col">Nacionalidad</th>
 
         </tr>
     </thead>
