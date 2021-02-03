@@ -7,6 +7,7 @@ create or replace function public.reporte_catorce()
                 num_abandonos bigint
             )
     language 'plpgsql'
+    security definer
 as
 $body$
 begin

@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION public.reporte_dieciseis_data_piloto(inp_ano integer)
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 

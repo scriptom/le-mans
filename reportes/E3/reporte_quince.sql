@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION public.reporte_quince_autos(inp_fabricante varchar)
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 
@@ -46,6 +47,7 @@ CREATE OR REPLACE FUNCTION public.reporte_quince_cauchos(inp_fabricante varchar)
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 

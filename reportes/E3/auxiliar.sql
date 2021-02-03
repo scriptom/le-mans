@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION public.consultar_pilotos()
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 
@@ -34,7 +35,7 @@ CREATE OR REPLACE FUNCTION public.consultar_modelos_autos()
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
-
+    security definer
 AS $BODY$
 DECLARE 
     var_r record;
@@ -61,6 +62,7 @@ CREATE OR REPLACE FUNCTION public.consultar_anos()
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 
@@ -90,6 +92,7 @@ CREATE OR REPLACE FUNCTION public.consultar_fabricantes()
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 
@@ -114,6 +117,7 @@ CREATE OR REPLACE FUNCTION public.consultar_fabricantes_cauchos()
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 

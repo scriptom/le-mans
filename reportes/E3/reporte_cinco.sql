@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION public.reporte_cinco_data_piloto(var_id_piloto intege
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 
@@ -54,6 +55,7 @@ CREATE OR REPLACE FUNCTION public.reporte_cinco_data_participaciones(
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
 DECLARE 

@@ -6,6 +6,7 @@ CREATE OR REPLACE FUNCTION public.reporte_ocho_data(
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 AS $BODY$
 BEGIN
     return query

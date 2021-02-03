@@ -7,6 +7,7 @@ create or replace function public.reporte_trece()
                 num_podiums  bigint
             )
     language 'plpgsql'
+    security definer
 as
 $body$
 begin

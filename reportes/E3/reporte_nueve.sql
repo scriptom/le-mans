@@ -1,5 +1,7 @@
 CREATE OR REPLACE FUNCTION public.reporte_nueve_contador(inp_id_piloto integer)
-    RETURNS integer as $$
+    RETURNS integer
+    security definer
+    as $$
 
 DECLARE 
     var_r record;
@@ -33,14 +35,15 @@ $$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION public.reporte_nueve_data()
     RETURNS TABLE(piloto_nombre varchar, piloto_pais varchar, piloto_foto_pais varchar, piloto_foto varchar,
-				 piloto_participaciones integer) 
+				 piloto_participaciones integer)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
     ROWS 1000
+    security definer
 
 AS $BODY$
-DECLARE 
+DECLARE
     var_r record;
 	mayor_numero integer;
 	id_piloto_mayor integer;
