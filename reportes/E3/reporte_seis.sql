@@ -40,7 +40,7 @@ BEGIN
 		LOOP
 		
 
-
+		if var_participaciones.id_piloto1<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -48,7 +48,7 @@ BEGIN
 			auto_foto:= var_participaciones.auto_foto; 
 			auto_modelo:= var_participaciones.auto_modelo; 
 			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
+			piloto_nombre:= var_participaciones.piloto_nombre1; 
 			piloto_pais:= var_participaciones.piloto_pais1; 
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
 			auto_motor:= var_participaciones.auto_motor;
@@ -56,6 +56,8 @@ BEGIN
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
 			auto_hibrido:= var_participaciones.auto_hibrido;
 			RETURN NEXT;	
+		end if;
+		if var_participaciones.id_piloto2<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -71,6 +73,8 @@ BEGIN
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
 			auto_hibrido:= var_participaciones.auto_hibrido;
 			RETURN NEXT;
+		end if;
+		if var_participaciones.id_piloto3<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -86,6 +90,7 @@ BEGIN
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
 			auto_hibrido:= var_participaciones.auto_hibrido;
 			RETURN NEXT;	
+		end if;
 	
 				
 		END LOOP;

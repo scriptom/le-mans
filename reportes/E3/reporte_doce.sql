@@ -45,7 +45,7 @@ BEGIN
 		LOOP
 		
 
-
+		if var_participaciones.id_piloto1<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -53,19 +53,20 @@ BEGIN
 			auto_foto:= var_participaciones.auto_foto; 
 			auto_modelo:= var_participaciones.auto_modelo; 
 			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
+			piloto_nombre:= var_participaciones.piloto_nombre1; 
 			piloto_pais:= var_participaciones.piloto_pais1; 
 			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
 			auto_motor:= var_participaciones.auto_motor;
 			auto_fabricante:= var_participaciones.auto_fabricante;
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
-			
 			cantidad_vueltas:= var_participaciones.cantidad_vueltas; 
 			distancia_recorrida:= var_participaciones.distancia_recorrida; 
 			velocidad_media:= var_participaciones.velocidad_media; 
 			diferencia_puesto_anterior_vueltas:= var_participaciones.diferencia_puesto_anterior_vueltas; 
 			diferencia_puesto_anterior_tiempo:= var_participaciones.diferencia_puesto_anterior_tiempo;
 			RETURN NEXT;	
+		end if;
+		if var_participaciones.id_piloto2<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -79,13 +80,14 @@ BEGIN
 			auto_motor:= var_participaciones.auto_motor;
 			auto_fabricante:= var_participaciones.auto_fabricante;
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
-			
 			cantidad_vueltas:= var_participaciones.cantidad_vueltas; 
 			distancia_recorrida:= var_participaciones.distancia_recorrida; 
 			velocidad_media:= var_participaciones.velocidad_media; 
 			diferencia_puesto_anterior_vueltas:= var_participaciones.diferencia_puesto_anterior_vueltas; 
 			diferencia_puesto_anterior_tiempo:= var_participaciones.diferencia_puesto_anterior_tiempo;
 			RETURN NEXT;
+		end if;
+		if var_participaciones.id_piloto3<>0 then
 			ano:= var_participaciones.ano; 
 			numero_equipo:= var_participaciones.numero_equipo; 
 			equipo_nombre:= var_participaciones.equipo_nombre;
@@ -99,13 +101,13 @@ BEGIN
 			auto_motor:= var_participaciones.auto_motor;
 			auto_fabricante:= var_participaciones.auto_fabricante;
 			auto_fabricante_cauchos:= var_participaciones.auto_fabricante_cauchos;
-			
 			cantidad_vueltas:= var_participaciones.cantidad_vueltas; 
 			distancia_recorrida:= var_participaciones.distancia_recorrida; 
 			velocidad_media:= var_participaciones.velocidad_media; 
 			diferencia_puesto_anterior_vueltas:= var_participaciones.diferencia_puesto_anterior_vueltas; 
 			diferencia_puesto_anterior_tiempo:= var_participaciones.diferencia_puesto_anterior_tiempo;
 			RETURN NEXT;	
+		end if;
 	
 				
 		END LOOP;

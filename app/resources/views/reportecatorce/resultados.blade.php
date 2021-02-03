@@ -2,34 +2,31 @@
 @section('content')
 
 <div class="resultados">
-<h3>Piloto mas joven</h3>
+<h3>Pilotos que nunca pisaron la meta</h3>
 
 <div class="w-75 resultados_completo">
 
 <table id="r3" class="table">
     <thead>
         <tr>
-            <th scope="col">Año Carrera</th>
-            <th scope="col">Edad</th>
             <th scope="col">Nombre</th>
             <th scope="col">Nacionalidad</th>
-
+            <th scope="col">Número de abandonos</th>
+ 
         </tr>
     </thead>
     <tbody>
-          @foreach($data as $item)
+        @foreach ($data as $item)
             <tr>
-                <td>{{$item->ano}}</td>
-                <td>{{$item->piloto_edad}}</td>
-                    @if($item->piloto_foto)
-                        <td imagen="{{$item->piloto_foto}}" class="desplegar-modal">{{$item->piloto_nombre}}</td>
+                  @if($item->foto)
+                        <td imagen="{{$item->foto}}" class="desplegar-modal">{{$item->nombre}}</td>
                     @else
-                        <td>{{$item->nombre_piloto}}</td>
-                    @endif
-                    <td>{{$item->piloto_pais}}</td>
+                        <td>{{$item->nombre}}</td>
+                    @endif  
+                <td>{{$item->nacionalidad}}</td>
+                <td>{{$item->num_abandonos}}</td>
             </tr>
-          @endforeach  
-
+        @endforeach
     </tbody>
 </table>
 

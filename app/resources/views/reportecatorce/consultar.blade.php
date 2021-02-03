@@ -3,8 +3,8 @@
 
 <div class="consultar">
     <div class="consultar-izquierda">
-        <h3 class="offest-top">En el pódium, pero nunca ganadores</h3>
-        <form method="POST" action="{{ route('reportetrece.resultados') }}" enctype="multipart/form-data">
+        <h3 class="offest-top">Pilotos que nunca pisaron la meta</h3>
+        <form method="POST" action="{{ route('reportecatorce.resultados') }}" enctype="multipart/form-data">
         @csrf          
             <button class="boton-consultar" type="submit">Consultar!</button>
         </form>

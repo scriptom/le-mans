@@ -85,78 +85,90 @@ BEGIN
 		LOOP
 		
 
-
-			if var_participaciones.id_piloto1=inp_id_piloto then	
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo; 
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
-			piloto_pais:= var_participaciones.piloto_pais2; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
-			RETURN NEXT;
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo;
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre3; 
-			piloto_pais:= var_participaciones.piloto_pais3; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
-			RETURN NEXT;	
+		
+			if var_participaciones.id_piloto1=inp_id_piloto then
+				if var_participaciones.id_piloto2<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo; 
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre2; 
+				piloto_pais:= var_participaciones.piloto_pais2; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
+				RETURN NEXT;
+				end if;
+				if var_participaciones.id_piloto3<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo;
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre3; 
+				piloto_pais:= var_participaciones.piloto_pais3; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
+				RETURN NEXT;	
+				end if;
 			
 			elsif var_participaciones.id_piloto2=inp_id_piloto then
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo; 
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre1; 
-			piloto_pais:= var_participaciones.piloto_pais1; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
-			RETURN NEXT;
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo; 
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre3; 
-			piloto_pais:= var_participaciones.piloto_pais3; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
-			RETURN NEXT;	
+				if var_participaciones.id_piloto1<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo; 
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre1; 
+				piloto_pais:= var_participaciones.piloto_pais1; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
+				RETURN NEXT;
+				end if;
+				if var_participaciones.id_piloto3<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo; 
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre3; 
+				piloto_pais:= var_participaciones.piloto_pais3; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais3;
+				RETURN NEXT;	
+				end if;
 			
 			else
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo; 
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre2; 
-			piloto_pais:= var_participaciones.piloto_pais2; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
-			RETURN NEXT;
-			ano:= var_participaciones.ano; 
-			numero_equipo:= var_participaciones.numero_equipo; 
-			equipo_nombre:= var_participaciones.equipo_nombre;
-			auto_categoria:= var_participaciones.auto_categoria; 
-			auto_foto:= var_participaciones.auto_foto; 
-			auto_modelo:= var_participaciones.auto_modelo; 
-			puesto_final:= var_participaciones.puesto_final; 
-			piloto_nombre:= var_participaciones.piloto_nombre1; 
-			piloto_pais:= var_participaciones.piloto_pais1; 
-			piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
-			RETURN NEXT;	
+				if var_participaciones.id_piloto2<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo; 
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre2; 
+				piloto_pais:= var_participaciones.piloto_pais2; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais2;
+				RETURN NEXT;
+				end if;
+				if var_participaciones.id_piloto1<>0 then
+				ano:= var_participaciones.ano; 
+				numero_equipo:= var_participaciones.numero_equipo; 
+				equipo_nombre:= var_participaciones.equipo_nombre;
+				auto_categoria:= var_participaciones.auto_categoria; 
+				auto_foto:= var_participaciones.auto_foto; 
+				auto_modelo:= var_participaciones.auto_modelo; 
+				puesto_final:= var_participaciones.puesto_final; 
+				piloto_nombre:= var_participaciones.piloto_nombre1; 
+				piloto_pais:= var_participaciones.piloto_pais1; 
+				piloto_foto_pais:= var_participaciones.piloto_foto_pais1;
+				RETURN NEXT;	
+				end if;
 			end if;
 	
 				

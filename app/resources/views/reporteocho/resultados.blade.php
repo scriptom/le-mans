@@ -12,12 +12,12 @@
             <th scope="col">Año Carrera</th>
             <th scope="col">Edad</th>
             <th scope="col">Nombre</th>
-            <th scope="col">País</th>
+            <th scope="col">Nacionalidad</th>
 
         </tr>
     </thead>
     <tbody>
-
+          @foreach($data as $item)
             <tr>
                 <td>{{$item->ano}}</td>
                 <td>{{$item->piloto_edad}}</td>
@@ -28,6 +28,7 @@
                     @endif
                     <td>{{$item->piloto_pais}}</td>
             </tr>
+          @endforeach  
 
     </tbody>
 </table>
