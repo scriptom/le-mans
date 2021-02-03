@@ -1,5 +1,5 @@
 -- Creación de roles
-create role "Desarrollador" superuser; -- == Admin
+create role Desarrollador superuser; -- == Admin
 create role "Analista de negocios 1";
 create role "Analista de negocios 2";
 create role "Analista de negocios 3";
